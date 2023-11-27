@@ -19,5 +19,10 @@ namespace TSEconomy.Database.Models
 
         [Column("Balance")]
         public double Balance { get { return _balance; } set { _balance = value; TSEconomy.DB.DB.Update(this);  } }
+
+        public bool TryTransferTo(BankAccount receiver, double amount)
+        {
+            return Api.TryTransferTo(this, receiver, amount);
+        }
     }
 }

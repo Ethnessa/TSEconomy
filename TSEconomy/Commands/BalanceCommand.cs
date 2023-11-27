@@ -7,7 +7,7 @@ namespace TSEconomy.Commands
     public class BalanceCommand : CommandBase
     {
         public override string[] Aliases { get; set; } = { "balance", "bal", "money" };
-        public override string[] PermissionNodes { get; set; } = { Permissions.User };
+        public override string[] PermissionNodes { get; set; } = { Permissions.User, Permissions.Balance };
 
         public override void Execute(CommandArgs args)
         {

@@ -17,7 +17,9 @@ namespace TSEconomy.Commands
         }
         public static List<CommandBase> List { get; set; } = new()
         {
-            new BalanceCommand()
+            new BalanceCommand(),
+            new SendCommand(),
+            new ListCurrenciesCommand()
         };
     }
 }

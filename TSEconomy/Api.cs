@@ -1,8 +1,6 @@
-﻿using NuGet.Protocol.Plugins;
-using PetaPoco;
+﻿using PetaPoco;
 using TSEconomy.Configuration.Models;
 using TSEconomy.Database.Models;
-using TShockAPI.DB;
 
 namespace TSEconomy
 {
@@ -10,18 +8,23 @@ namespace TSEconomy
     {
         public static Configuration.Configuration Config => Configuration.Configuration.Instance;
         public static IDatabase DB => TSEconomy.DB.DB;
-        
+
         public static bool HasBankAccount(int userId, Currency curr)
         {
             return DB.ExecuteScalar<int>("SELECT COUNT(*) FROM BankAccounts Where UserID = @0 AND Currency = @1", userId, curr.InternalName) > 0;
         }
         public static BankAccount GetBankAccount(int userId, Currency curr)
         {
-            if(!HasBankAccount(userId, curr))
+            if (!HasBankAccount(userId, curr))
             {
                 return InsertBankAccount(userId, curr);
             }
             return DB.FirstOrDefault<BankAccount>("SELECT * FROM BankAccounts WHERE UserID = @0 AND Currency = @1", userId, curr.InternalName);
+        }
+
+        public static List<Currency> GetCurrencies()
+        {
+            return TSEconomy.Config.Currencies;
         }
 
         public static void UpdateBankAccount(BankAccount account)
@@ -53,7 +56,7 @@ namespace TSEconomy
 
         public static bool TryTransferTo(BankAccount payee, BankAccount receiver, double amount)
         {
-            if(payee.Balance >= amount)
+            if (payee.Balance >= amount)
             {
                 receiver.Balance += amount;
                 payee.Balance -= amount;
@@ -64,7 +67,7 @@ namespace TSEconomy
 
         public static bool TryMakePayment(BankAccount payee, double amount)
         {
-            if(payee.Balance >= amount)
+            if (payee.Balance >= amount)
             {
                 payee.Balance -= amount;
                 return true;
@@ -74,14 +77,14 @@ namespace TSEconomy
 
         public static bool HasEnough(BankAccount account, double amount)
         {
-            if(account.Balance >= amount)
+            if (account.Balance >= amount)
             {
                 return true;
             }
             return false;
         }
-        
-        
+
+
 
     }
 }

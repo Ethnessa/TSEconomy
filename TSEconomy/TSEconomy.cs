@@ -31,6 +31,11 @@ namespace TSEconomy
             // register commands
             Commands.Commands.RegisterAll();
 
+            // register hooks
+            TShockAPI.Hooks.GeneralHooks.ReloadEvent += (x) => {
+                Configuration.Configuration.Load();
+                x.Player.SendSuccessMessage("[TSEconomy] Reloaded config.");
+            };
         }
     }
 }
