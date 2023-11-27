@@ -24,5 +24,16 @@ namespace TSEconomy
             onlinePlayer = null;
             return null;
         }
+
+        public static string? GetAccountName(int UserID)
+        {
+            var user = TShock.UserAccounts.GetUserAccountByID(UserID);
+            if(user == null)
+            {
+                return null;
+            }
+
+            return user.Name;
+        }
     }
 }

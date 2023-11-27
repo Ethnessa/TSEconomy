@@ -44,6 +44,7 @@ namespace TSEconomy.Database
             if (type == typeof(int)) return "INTEGER";
             if (type == typeof(double)) return "REAL";
             if (type == typeof(string)) return (dbProvider == DBType.SQLite ? "TEXT" : "VARCHAR(255)");
+            if (type == typeof(DateTime)) return "DATETIME";
 
             throw new NotSupportedException($"Type {type} not supported.");
         }

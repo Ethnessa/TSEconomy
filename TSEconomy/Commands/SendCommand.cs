@@ -28,6 +28,12 @@ namespace TSEconomy.Commands
                 return;
             }
 
+            if(sendingTo.ID == player.Account.ID)
+            {
+                player.SendErrorMessage("You can't send money to yourself!");
+                return;
+            }
+
             var curr = param.ElementAtOrDefault(1);
             Currency? currency = curr == default ? Currency.GetFirst() : Currency.Get(curr);
 

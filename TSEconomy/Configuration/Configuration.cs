@@ -10,6 +10,9 @@ namespace TSEconomy.Configuration
         private static string path = Path.Combine(TShock.SavePath, "TSEconomy.json");
         public static Configuration Instance { get; set; }
 
+        [JsonProperty("TransactionLogPath")]
+        public string TransactionLogPath { get; set; } = Path.Combine(TShock.SavePath, "TSEconomyLogs");
+
         [JsonProperty("UseMySQL", Order = 0)]
         public bool UseMySQL { get; set; } = false;
 

@@ -66,6 +66,7 @@ namespace TSEconomy.Database
         public void EnsureTableStructure(DBType type)
         {
             new Table<BankAccount>(DB, type);
+            new Table<Models.Transaction>(DB, type);
         }
     }
 }
