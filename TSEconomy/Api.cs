@@ -22,11 +22,12 @@ namespace TSEconomy
         }
         public static BankAccount GetBankAccount(int userId, Currency curr)
         {
-            if (!HasBankAccount(userId, curr))
+            var bankAccount = DB.FirstOrDefault<BankAccount>("SELECT * FROM BankAccounts WHERE UserID = @0 AND Currency = @1", userId, curr.InternalName);
+            if (bankAccount == null)
             {
                 return InsertBankAccount(userId, curr);
             }
-            return DB.FirstOrDefault<BankAccount>("SELECT * FROM BankAccounts WHERE UserID = @0 AND Currency = @1", userId, curr.InternalName);
+            return bankAccount;
         }
 
         public static List<Currency> GetCurrencies()
@@ -104,7 +105,7 @@ namespace TSEconomy
                 TransactionDetails = transLogMessage,
                 Timestamp = DateTime.Now
             };
-            Api.InsertTransaction(trans);
+            InsertTransaction(trans);
             return trans;
         }
 
@@ -116,8 +117,5 @@ namespace TSEconomy
             }
             return false;
         }
-
-
-
     }
 }
