@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using TSEconomy.Configuration.Models;
 using TShockAPI;
 
 namespace TSEconomy.Configuration
@@ -11,6 +12,9 @@ namespace TSEconomy.Configuration
 
         [JsonProperty("UseMySQL", Order = 0)]
         public bool UseMySQL { get; set; } = false;
+
+        [JsonProperty("Currencies")]
+        public List<Currency> Currencies { get; set; } = new() { new() };
 
         public static void Load()
         {

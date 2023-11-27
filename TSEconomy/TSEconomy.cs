@@ -1,12 +1,14 @@
 ﻿using Terraria;
 using TerrariaApi.Server;
+using TSEconomy.Commands;
+using TShockAPI;
 
 namespace TSEconomy
 {
     [ApiVersion(2,1)]
     public class TSEconomy : TerrariaPlugin
     {
-        public override string Author => "TSCN";
+        public override string Author => "TCN";
         public override string Description => "A plugin that adds an economy to your server.";
         public override string Name => "TSEconomy";
         public override Version Version => new Version(1, 0);
@@ -25,7 +27,10 @@ namespace TSEconomy
 
             // init db
             DB.InitializeDB(Config.UseMySQL);
-            
+
+            // register commands
+            Commands.Commands.RegisterAll();
+
         }
     }
 }

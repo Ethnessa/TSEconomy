@@ -7,7 +7,7 @@ namespace TSEconomy.Database
 {
     public class Database
     {
-        protected IDatabase DB;
+        public IDatabase DB;
 
         /// <summary>
         /// Initializes & connects to the database
