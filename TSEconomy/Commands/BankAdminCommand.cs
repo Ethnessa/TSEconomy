@@ -58,8 +58,7 @@ namespace TSEconomy.Commands
                         if (couldParse && amnt > 0)
                         {
                             var bankAccount = Api.GetBankAccount(affectedUser.ID, currency);
-                            Api.AddTransaction(affectedUser.ID, currency.InternalName, amnt, $"The admin {player.Account.Name} set the user {affectedUser.Name}'s {currency.InternalName} balance from {bankAccount.Balance} to {amnt}.");
-                            bankAccount.Balance = amnt;
+                            bankAccount.SetBalance(amnt, "The admin {0} set the user {{0}}'s balance from {{1}} to {{2}}.".SFormat(player.Name));
 
                             if (affectedPlayer != null)
                             {
@@ -99,9 +98,7 @@ namespace TSEconomy.Commands
                         }
 
                         var bankAccount = Api.GetBankAccount(affectedUser.ID, currency);
-                        Api.AddTransaction(affectedUser.ID, currency.InternalName, -bankAccount.Balance, $"The admin {player.Account.Name} reset the user {affectedUser.Name}'s {currency.InternalName} balance from {bankAccount.Balance} to 0.");
-                        bankAccount.Balance = 0;
-
+                        bankAccount.SetBalance(0, "The admin {0} reset the user {{0}}'s balance from {bankAccount.Balance} to {{1}}. Old Balance: {{2}}".SFormat(player.Account.Name));
                         if (affectedPlayer != null)
                         {
                             affectedPlayer.SendInfoMessage($"Your balance for {currency.DisplayName} was reset to 0 by {player.Name}");

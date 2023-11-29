@@ -1,6 +1,7 @@
 ﻿using Terraria;
 using TerrariaApi.Server;
 using TSEconomy.Commands;
+using TSEconomy.Configuration.Models;
 using TShockAPI;
 
 namespace TSEconomy
@@ -22,20 +23,27 @@ namespace TSEconomy
 
         public override void Initialize()
         {
+            // register hooks
+            ServerApi.Hooks.GameInitialize.Register(this, OnInitialize);
+
+            TShockAPI.Hooks.GeneralHooks.ReloadEvent += (x) => {
+                Configuration.Configuration.Load();
+                x.Player.SendSuccessMessage("[TSEconomy] Reloaded config.");
+
+            };
+
+            // register commands
+            Commands.Commands.RegisterAll();
+        }
+
+        public void OnInitialize(EventArgs args)
+        {
             // load our config file
             Configuration.Configuration.Load();
 
             // init db
             DB.InitializeDB(Config.UseMySQL);
 
-            // register commands
-            Commands.Commands.RegisterAll();
-
-            // register hooks
-            TShockAPI.Hooks.GeneralHooks.ReloadEvent += (x) => {
-                Configuration.Configuration.Load();
-                x.Player.SendSuccessMessage("[TSEconomy] Reloaded config.");
-            };
         }
     }
 }
