@@ -8,7 +8,7 @@ namespace TSEconomy.Database.Models
 {
     public enum TransactionProperties
     {
-        set = 1,
-        add = 1 << 1
+        Set = 1,
+        Add = 1 << 1
     }
 }
