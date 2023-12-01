@@ -28,7 +28,7 @@ namespace TSEconomy.Database.Models
         private double _balance;
 
         [Column("Balance")]
-        public double Balance { get { return _balance; } }
+        public double Balance { get { return _balance; } set { } }
         
         public static BankAccount? TryCreateNewAccount(double initialbalance, string internalCurrencyName, int userID, BankAccountProperties flags = BankAccountProperties.Default,
                                                     string transLog = "{0} has created a new bank account ({1}), with the initial value of {2}.")
@@ -62,7 +62,7 @@ namespace TSEconomy.Database.Models
                 return acc;
 
             Api.AddTransaction(userID, internalCurrencyName, initialbalance, transLog.SFormat(Helpers.GetAccountName(userID), internalCurrencyName, initialbalance), 
-                               TransactionProperties.set);
+                               TransactionProperties.Set);
 
             return acc;
 
@@ -83,7 +83,7 @@ namespace TSEconomy.Database.Models
                 return true;
 
             Api.AddTransaction(UserID, InternalCurrencyName, amount, transLog.SFormat(Helpers.GetAccountName(UserID), amount, Balance - amount, Balance), 
-                               TransactionProperties.add);
+                               TransactionProperties.Add);
 
             return true;
         }
@@ -100,7 +100,7 @@ namespace TSEconomy.Database.Models
                 return true;
 
             Api.AddTransaction(UserID, InternalCurrencyName, amount, transLog.SFormat(Helpers.GetAccountName(UserID), amount, Balance + amount, Balance),
-                               TransactionProperties.add);
+                               TransactionProperties.Add);
 
             return true;
         }
@@ -123,7 +123,7 @@ namespace TSEconomy.Database.Models
             if (IsWorldAccount())
                 return;
 
-            Api.AddTransaction(UserID, InternalCurrencyName, amount, transLog.SFormat(Helpers.GetAccountName(UserID), amount, oldBalance), TransactionProperties.set);
+            Api.AddTransaction(UserID, InternalCurrencyName, amount, transLog.SFormat(Helpers.GetAccountName(UserID), amount, oldBalance), TransactionProperties.Set);
         }
 
         public bool TryTransferTo(BankAccount receiver, double amount)
@@ -148,7 +148,7 @@ namespace TSEconomy.Database.Models
 
         public bool IsWorldAccount()
         {
-            return (Flags & BankAccountProperties.WorldAccount) == BankAccountProperties.WorldAccount;
+            return Flags == BankAccountProperties.WorldAccount;
         }
 
 

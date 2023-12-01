@@ -19,6 +19,7 @@ namespace TSEconomy
 
         public TSEconomy(Main game) : base(game)
         {
+            Order = 1;
         }
 
         public override void Initialize()
@@ -26,23 +27,24 @@ namespace TSEconomy
             // register hooks
             ServerApi.Hooks.GameInitialize.Register(this, OnInitialize);
 
-            TShockAPI.Hooks.GeneralHooks.ReloadEvent += (x) => {
-                Configuration.Configuration.Load();
-                x.Player.SendSuccessMessage("[TSEconomy] Reloaded config.");
-
-            };
-
-            // register commands
-            Commands.Commands.RegisterAll();
-        }
-
-        public void OnInitialize(EventArgs args)
-        {
             // load our config file
             Configuration.Configuration.Load();
 
             // init db
             DB.InitializeDB(Config.UseMySQL);
+
+            // register commands
+            Commands.Commands.RegisterAll();
+
+            // register hooks
+            TShockAPI.Hooks.GeneralHooks.ReloadEvent += (x) => {
+                Configuration.Configuration.Load();
+                x.Player.SendSuccessMessage("[TSEconomy] Reloaded config.");
+            };
+        }
+
+        public void OnInitialize(EventArgs args)
+        {
 
         }
     }

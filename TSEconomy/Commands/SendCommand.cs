@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using TSEconomy.Configuration.Models;
+using TSEconomy.Extentions;
 using TShockAPI;
 
 namespace TSEconomy.Commands
@@ -28,7 +29,7 @@ namespace TSEconomy.Commands
                 return;
             }
 
-            if(sendingTo.ID == player.Account.ID)
+            if(sendingTo.ID == player.GetUserId())
             {
                 player.SendErrorMessage("You can't send money to yourself!");
                 return;
@@ -56,7 +57,7 @@ namespace TSEconomy.Commands
                 return;
             }
 
-            var bankAccount = Api.GetBankAccount(player.Account.ID, currency);
+            var bankAccount = Api.GetBankAccount(player.GetUserId(), currency);
             var receiverAccount = Api.GetBankAccount(sendingTo.ID, currency);
             var success = bankAccount.TryTransferTo(receiverAccount, amnt);
 

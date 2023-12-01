@@ -19,7 +19,8 @@ namespace TSEconomy.Commands
         {
             new BalanceCommand(),
             new SendCommand(),
-            new ListCurrenciesCommand()
+            new ListCurrenciesCommand(),
+            new BankAdminCommand()
         };
     }
 }

@@ -35,7 +35,7 @@ namespace TSEconomy.Logging
 
             using (StreamWriter writer = File.AppendText(sessionLogFile))
             {
-                string flag = (trans.Flags & TransactionProperties.set) == TransactionProperties.set ? "Set" : "Add";
+                string flag = trans.Flags == TransactionProperties.Set ? "Set" : "Add";
 
                 writer.WriteLine($"[{trans.Timestamp}] [{flag}] [Cur:{trans.InternalCurrencyName}] [ID:{trans.UserID}]: {trans.TransactionDetails}");
             }

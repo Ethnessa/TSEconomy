@@ -10,8 +10,8 @@ namespace TSEconomy.Database.Models
     // that would make it so some account would give us the job to allow players to remove properties
     public enum BankAccountProperties
     {
-        Default = 1,
-        WorldAccount = 1 << 1
+        Default,
+        WorldAccount
     }
 }
 

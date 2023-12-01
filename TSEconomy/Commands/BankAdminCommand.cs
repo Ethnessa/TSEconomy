@@ -98,7 +98,7 @@ namespace TSEconomy.Commands
                         }
 
                         var bankAccount = Api.GetBankAccount(affectedUser.ID, currency);
-                        bankAccount.SetBalance(0, "The admin {0} reset the user {{0}}'s balance from {bankAccount.Balance} to {{1}}. Old Balance: {{2}}".SFormat(player.Account.Name));
+                        bankAccount.SetBalance(0, "The admin {0} reset the user {{0}}'s balance from {bankAccount.Balance} to {{1}}. Old Balance: {{2}}".SFormat(player.Name));
                         if (affectedPlayer != null)
                         {
                             affectedPlayer.SendInfoMessage($"Your balance for {currency.DisplayName} was reset to 0 by {player.Name}");

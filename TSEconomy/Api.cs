@@ -24,26 +24,12 @@ namespace TSEconomy
             }   
         }
 
-        public static Currency SystemCurrency 
+        public static Currency SystemCurrency { get; } = new Currency()
         {
-            get
-            {
-                if (!Currencies.Any(i => i.isSystemCurrency()))
-                {
-                    var systemCurr = new Currency()
-                    {
-                        DisplayName = "System-Cash",
-                        InternalName = "sys",
-                        Symbol = "^"
-                    };
-
-                    _currencies.Add(systemCurr);
-                    return systemCurr;
-                }
-
-                return Currencies.First(i => i.isSystemCurrency());
-            }
-        }
+            DisplayName = "System-Cash",
+            InternalName = "sys",
+            Symbol = "^"
+        };
         public static List<BankAccount> BankAccounts {
             get
             {
@@ -55,7 +41,7 @@ namespace TSEconomy
         {
             get
             {
-                if (!BankAccounts.Any(i => (i.Flags & BankAccountProperties.WorldAccount) == BankAccountProperties.WorldAccount))
+                if (!BankAccounts.Any(i => i.Flags == BankAccountProperties.WorldAccount))
                 {
                     var worldAcc = BankAccount.TryCreateNewAccount(0, "sys", -1, BankAccountProperties.WorldAccount,
                                                                 "{0} has created a new world account for the server ({1}), initial value was set to {2}");
@@ -63,7 +49,7 @@ namespace TSEconomy
                     return worldAcc;
                 }
 
-                return BankAccounts.First(i => (i.Flags & BankAccountProperties.WorldAccount) == BankAccountProperties.WorldAccount);
+                return BankAccounts.First(i => i.Flags== BankAccountProperties.WorldAccount);
             }
         }
 
@@ -99,7 +85,7 @@ namespace TSEconomy
 
         public static List<Currency> GetCurrencies()
         {
-            return TSEconomy.Config.Currencies;
+            return TSEconomy.Config.Currencies.ToList();
         }
 
         public static void UpdateBankAccount(BankAccount account)
@@ -115,7 +101,7 @@ namespace TSEconomy
 
         public static void DeleteBankAccount(BankAccount account)
         {
-            AddTransaction(account.ID, account.InternalCurrencyName, 0, $"{Helpers.GetAccountName(account.ID)} had their bank account deleted.", TransactionProperties.set);
+            AddTransaction(account.ID, account.InternalCurrencyName, 0, $"{Helpers.GetAccountName(account.ID)} had their bank account deleted.", TransactionProperties.Set);
             DB.Delete(account);
         }
 
