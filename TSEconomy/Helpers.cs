@@ -27,6 +27,11 @@ namespace TSEconomy
 
         public static string? GetAccountName(int UserID)
         {
+            if(UserID == -1) 
+            {
+                return TSPlayer.Server.Name;
+            }
+
             var user = TShock.UserAccounts.GetUserAccountByID(UserID);
             if(user == null)
             {

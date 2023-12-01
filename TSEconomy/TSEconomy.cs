@@ -1,6 +1,7 @@
 ﻿using Terraria;
 using TerrariaApi.Server;
 using TSEconomy.Commands;
+using TSEconomy.Configuration.Models;
 using TShockAPI;
 
 namespace TSEconomy
@@ -18,10 +19,14 @@ namespace TSEconomy
 
         public TSEconomy(Main game) : base(game)
         {
+            Order = 1;
         }
 
         public override void Initialize()
         {
+            // register hooks
+            ServerApi.Hooks.GameInitialize.Register(this, OnInitialize);
+
             // load our config file
             Configuration.Configuration.Load();
 
@@ -36,6 +41,11 @@ namespace TSEconomy
                 Configuration.Configuration.Load();
                 x.Player.SendSuccessMessage("[TSEconomy] Reloaded config.");
             };
+        }
+
+        public void OnInitialize(EventArgs args)
+        {
+
         }
     }
 }

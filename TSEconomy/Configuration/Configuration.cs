@@ -17,7 +17,7 @@ namespace TSEconomy.Configuration
         public bool UseMySQL { get; set; } = false;
 
         [JsonProperty("Currencies")]
-        public List<Currency> Currencies { get; set; } = new() { new() };
+        public Currency[] Currencies { get; set; } = { new() };
 
         public static void Load()
         {

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using TSEconomy.Configuration.Models;
+using TSEconomy.Extentions;
 using TShockAPI;
 
 namespace TSEconomy.Commands
@@ -23,7 +24,7 @@ namespace TSEconomy.Commands
                 return;
             }
 
-            var bankAccount = Api.GetBankAccount(player.Account.ID, currency);
+            var bankAccount = player.GetBankAccount(currency);
             player.SendMessage($"You have {currency.Symbol}{bankAccount.Balance} {currency.DisplayName.ToLower()}{(bankAccount.Balance == 1 ? "" : "s")}", Color.LightGreen);
         }
     }

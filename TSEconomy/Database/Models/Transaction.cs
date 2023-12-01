@@ -24,14 +24,27 @@ namespace TSEconomy.Database.Models
         [Column("Timestamp")]
         public DateTime Timestamp { get; set; }
 
-        public Transaction() { }
+        [Column("Flags")]
+        public TransactionProperties Flags { get; set; }
 
-        public Transaction(int UserID, string internalCurrencyName, double amountChanged, string transDetails)
+        public Transaction(int UserID, string internalCurrencyName, double amountChanged, string transDetails, DateTime timeStamp, TransactionProperties flags)
         {
             this.UserID = UserID;
             this.InternalCurrencyName = internalCurrencyName;
             this.Amount = amountChanged;
             this.TransactionDetails = transDetails;
+            this.Timestamp = timeStamp;
+            this.Flags = flags;
+        }
+
+        public Transaction(int UserID, string internalCurrencyName, double amountChanged, string transDetails, TransactionProperties flags)
+        {
+            this.UserID = UserID;
+            this.InternalCurrencyName = internalCurrencyName;
+            this.Amount = amountChanged;
+            this.TransactionDetails = transDetails;
+            this.Timestamp = DateTime.UtcNow;
+            this.Flags = flags;
         }
     }
 }
