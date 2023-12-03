@@ -7,17 +7,20 @@ namespace TSEconomy.Configuration
     [JsonObject(MemberSerialization.OptIn)]
     public class Configuration
     {
-        private static string path = Path.Combine(TShock.SavePath, "TSEconomy.json");
+        private static string path = Path.Combine(TSEconomy.PluginDirectory, "TSEconomy.json");
         public static Configuration Instance { get; set; }
 
         [JsonProperty("TransactionLogPath")]
-        public string TransactionLogPath { get; set; } = Path.Combine(TShock.SavePath, "TSEconomyLogs");
+        public string TransactionLogPath { get; set; } = Path.Combine(TSEconomy.PluginDirectory, "TSEconomyLogs");
 
         [JsonProperty("UseMySQL", Order = 0)]
         public bool UseMySQL { get; set; } = false;
 
         [JsonProperty("Currencies")]
         public Currency[] Currencies { get; set; } = { new() };
+
+        [JsonProperty("Language")]
+        public string Language { get; set; } = "Lang_en";
 
         public static void Load()
         {
@@ -30,7 +33,7 @@ namespace TSEconomy.Configuration
                 }
                 catch (Exception ex)
                 {
-                    TShock.Log.ConsoleError($"TSEconomy.json could not be loaded: \n {ex.ToString()}");
+                    TShock.Log.ConsoleError("TSEconomy.json could not be loaded: \n {0}".SFormat(ex.ToString()));
                 }
             }
             else
@@ -45,6 +48,8 @@ namespace TSEconomy.Configuration
             {
                 Instance = new Configuration();
             }
+            if(!Directory.Exists(TSEconomy.PluginDirectory))
+                Directory.CreateDirectory(TSEconomy.PluginDirectory);
 
             File.WriteAllText(path, JsonConvert.SerializeObject(Instance, Formatting.Indented));
         }

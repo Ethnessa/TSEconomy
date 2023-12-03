@@ -1,13 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
 using TSEconomy.Configuration.Models;
 using TSEconomy.Extentions;
+using TSEconomy.Lang;
 using TShockAPI;
 
 namespace TSEconomy.Commands
 {
     public class SendCommand : CommandBase
     {
-        public override string[] Aliases { get; set; } = { "send", "transferto", "pay" };
+        public override string[] Aliases { get; set; } = { Localization.TryGetString("send"), Localization.TryGetString("transferto"), Localization.TryGetString("pay") };
         public override string[] PermissionNodes { get; set; } = { Permissions.User, Permissions.Send };
         // send <player> <currency> <amount>
         public override void Execute(CommandArgs args)
@@ -17,7 +18,7 @@ namespace TSEconomy.Commands
 
             if (param.ElementAtOrDefault(0) == default)
             {
-                player.SendInfoMessage($"Please use the command as follows: /{ShortestAlias} <player> <currency> <amount>");
+                player.SendInfoMessage(Localization.TryGetString("[i:855]Please use the command as follows: /{0} <player> <currency> <amount>", "Send").SFormat(ShortestAlias));
                 return;
             }
 
@@ -25,13 +26,13 @@ namespace TSEconomy.Commands
 
             if (sendingTo == null)
             {
-                player.SendErrorMessage("That player doesn't exist!");
+                player.SendErrorMessage(Localization.TryGetString("[i:855]That player does not exist!", "Send"));
                 return;
             }
 
             if(sendingTo.ID == player.GetUserId())
             {
-                player.SendErrorMessage("You can't send money to yourself!");
+                player.SendErrorMessage(Localization.TryGetString("[i:855]You can't send money to yourself!", "Send"));
                 return;
             }
 
@@ -40,20 +41,20 @@ namespace TSEconomy.Commands
 
             if (currency == null)
             {
-                player.SendErrorMessage("That's not a valid currency!");
+                player.SendErrorMessage(Localization.TryGetString("[i:855]That's not a valid currency!", "Send"));
                 return;
             }
 
             var amntInput = param.ElementAtOrDefault(2);
             if (!int.TryParse(amntInput, out var amnt))
             {
-                player.SendErrorMessage("That's not a valid amount!");
+                player.SendErrorMessage(Localization.TryGetString("[i:855]The amount you entered was invalid!", "Send"));
                 return;
             }
 
             if (amnt <= 0)
             {
-                player.SendErrorMessage("You can't send 0 or less money!");
+                player.SendErrorMessage(Localization.TryGetString("[i:855]You can't send 0 or less money!", "Send"));
                 return;
             }
 
@@ -63,16 +64,17 @@ namespace TSEconomy.Commands
 
             if (!success)
             {
-                player.SendErrorMessage("You don't have enough money!");
+                player.SendErrorMessage(Localization.TryGetString("[i:855]You don't have enough money!", "Send"));
                 return;
             }
 
-            player.SendMessage($"You sent {currency.Symbol}{amnt} {currency.DisplayName.ToLower()}{(amnt == 1 ? "" : "s")} to {sendingTo.Name}", Color.LightGreen);
+            player.SendMessage(Localization.TryGetString("[i:855]You sent {0} to {1}", "Send").SFormat(currency.GetName(amnt, showName: true), sendingTo.Name), Color.LightGreen);
             if(receiverPlayer != null)
             {
                 if (receiverPlayer != null)
                 {
-                    receiverPlayer.SendMessage($"You have been sent {currency.Symbol}{amnt} {currency.DisplayName.ToLower()}{(amnt == 1 ? "" : "s")}", Color.LightGreen);
+                    receiverPlayer.SendMessage(Localization.TryGetString("[i:855]You have been sent {0}{1}.", "plugin")
+                                  .SFormat(currency.GetName(amnt, showName: true), args.Silent ? "" : Localization.TryGetString(" by {0}").SFormat(player.Name)), Color.LightGreen);
                 }
             }
         }

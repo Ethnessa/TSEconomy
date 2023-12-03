@@ -2,6 +2,7 @@
 using TerrariaApi.Server;
 using TSEconomy.Commands;
 using TSEconomy.Configuration.Models;
+using TSEconomy.Lang;
 using TShockAPI;
 
 namespace TSEconomy
@@ -16,6 +17,8 @@ namespace TSEconomy
 
         public static Configuration.Configuration Config => Configuration.Configuration.Instance;
         public static Database.Database DB { get; set; } = new();
+
+        public static readonly string PluginDirectory = Path.Combine(TShock.SavePath, "TSEconomy");
 
         public TSEconomy(Main game) : base(game)
         {
@@ -33,18 +36,20 @@ namespace TSEconomy
             // init db
             DB.InitializeDB(Config.UseMySQL);
 
+        }
+
+        public void OnInitialize(EventArgs args)
+        {
+            Localization.SetupLanguage();
+
             // register commands
             Commands.Commands.RegisterAll();
 
             // register hooks
             TShockAPI.Hooks.GeneralHooks.ReloadEvent += (x) => {
                 Configuration.Configuration.Load();
-                x.Player.SendSuccessMessage("[TSEconomy] Reloaded config.");
+                x.Player.SendSuccessMessage(Localization.TryGetString("[i:855]Reloaded config.", "plugin"));
             };
-        }
-
-        public void OnInitialize(EventArgs args)
-        {
 
         }
     }

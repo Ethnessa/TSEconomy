@@ -3,6 +3,7 @@
 using Terraria;
 using TSEconomy.Configuration.Models;
 using TSEconomy.Database.Models;
+using TSEconomy.Lang;
 using TSEconomy.Logging;
 using TShockAPI;
 
@@ -44,7 +45,7 @@ namespace TSEconomy
                 if (!BankAccounts.Any(i => i.Flags == BankAccountProperties.WorldAccount))
                 {
                     var worldAcc = BankAccount.TryCreateNewAccount(0, "sys", -1, BankAccountProperties.WorldAccount,
-                                                                "{0} has created a new world account for the server ({1}), initial value was set to {2}");
+                                                                Localization.TryGetString("{0} has created a new world account for the server ({1}), initial value was set to {2}"));
 
                     return worldAcc;
                 }
@@ -101,7 +102,7 @@ namespace TSEconomy
 
         public static void DeleteBankAccount(BankAccount account)
         {
-            AddTransaction(account.ID, account.InternalCurrencyName, 0, $"{Helpers.GetAccountName(account.ID)} had their bank account deleted.", TransactionProperties.Set);
+            AddTransaction(account.ID, account.InternalCurrencyName, 0, Localization.TryGetString("{0} had their bank account deleted.").SFormat(Helpers.GetAccountName(account.ID)), TransactionProperties.Set);
             DB.Delete(account);
         }
 
@@ -115,9 +116,9 @@ namespace TSEconomy
                 var receiverName = Helpers.GetAccountName(receiver.UserID);
                 var payeeName = Helpers.GetAccountName(payee.UserID);
 
-                payee.TryRemoveBalance(amount, "{{0}} has transfered {{1}} to {0}. Old bal: {{2}} new bal {{3}}".SFormat(receiverName));
+                payee.TryRemoveBalance(amount, Localization.TryGetString("{{0}} has transfered {{1}} to {0}. Old bal: {{2}} new bal {{3}}").SFormat(receiverName));
 
-                receiver.TryAddBalance(amount, "{{0}} has received {{1}} from {0}. Old bal: {{2}} new bal {{3}}".SFormat(payeeName));
+                receiver.TryAddBalance(amount, Localization.TryGetString("{{0}} has received {{1}} from {0}. Old bal: {{2}} new bal {{3}}").SFormat(payeeName));
 
                 return true;
             }
