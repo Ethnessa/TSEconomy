@@ -1,4 +1,3 @@
-# 💰 TSEconomy
 ![tsecon](https://github.com/Average-Org/TSEconomy/assets/24498058/9346a991-fd92-4912-a9a2-1eadc7fc75c2)
 TSEconomy is a comprehensive economy plugin for Terraria servers using TShock. It provides a robust framework for managing in-game currency, player transactions, and more. **Our end goal is to replace SEConomy once and for all! 🚀** 
 
