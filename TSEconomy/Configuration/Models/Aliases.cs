@@ -3,6 +3,7 @@ using TSEconomy.Commands;
 
 namespace TSEconomy.Configuration.Models
 {
+    [JsonObject(MemberSerialization.OptIn)]
     public class Aliases
     {
         public string[] GetAliases(CommandBase command) 

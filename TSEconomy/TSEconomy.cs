@@ -48,6 +48,7 @@ namespace TSEconomy
             // register hooks
             TShockAPI.Hooks.GeneralHooks.ReloadEvent += (x) => {
                 Configuration.Configuration.Load();
+                Commands.Commands.Refresh();
                 x.Player.SendSuccessMessage(Localization.TryGetString("[i:855]Reloaded config.", "plugin"));
             };
 
