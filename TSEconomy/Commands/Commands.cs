@@ -4,7 +4,7 @@
     {
         public static void RegisterAll()
         {
-            foreach (CommandBase cmd in List)
+            foreach (CommandBase cmd in List.Where(x=>x.Disabled==false))
             {
                 TShockAPI.Commands.ChatCommands.Add(cmd);
             }
@@ -12,7 +12,7 @@
 
         public static void Refresh()
         {
-            foreach(CommandBase cmd in List)
+            foreach(CommandBase cmd in List.Where(x=>x.Disabled==false))
             {
                 TShockAPI.Commands.ChatCommands.RemoveAll(x => x.CommandDelegate == cmd.Execute);
                 TShockAPI.Commands.ChatCommands.Add(cmd);
