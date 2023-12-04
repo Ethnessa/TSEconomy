@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TSEconomy.Configuration.Models;
+﻿using TSEconomy.Configuration.Models;
 using TSEconomy.Lang;
 using TShockAPI;
 
@@ -11,7 +6,6 @@ namespace TSEconomy.Commands
 {
     public class BankAdminCommand : CommandBase
     {
-        public override string[] Aliases { get; set; } = { Localization.TryGetString("bankadmin", ""), Localization.TryGetString("ecoadmin", ""), Localization.TryGetString("ba", "") };
         public override string[] PermissionNodes { get; set; } = { Permissions.Admin };
 
         public override void Execute(CommandArgs args)
@@ -106,7 +100,7 @@ namespace TSEconomy.Commands
                         }
                         return;
                     }
-                case string s when s == Localization.TryGetString("checkbal") :
+                case string s when s == Localization.TryGetString("checkbal"):
                     {
                         var affectedUser = Helpers.GetUser(parameters.ElementAtOrDefault(0), out var affectedPlayer);
 

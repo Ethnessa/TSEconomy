@@ -10,17 +10,21 @@ namespace TSEconomy.Configuration
         private static string path = Path.Combine(TSEconomy.PluginDirectory, "TSEconomy.json");
         public static Configuration Instance { get; set; }
 
-        [JsonProperty("TransactionLogPath")]
-        public string TransactionLogPath { get; set; } = Path.Combine(TSEconomy.PluginDirectory, "TSEconomyLogs");
-
         [JsonProperty("UseMySQL", Order = 0)]
         public bool UseMySQL { get; set; } = false;
 
-        [JsonProperty("Currencies")]
+        [JsonProperty("TransactionLogPath", Order = 1)]
+        public string TransactionLogPath { get; set; } = Path.Combine(TSEconomy.PluginDirectory, "TSEconomyLogs");
+
+        [JsonProperty("Language", Order = 2)]
+        public string Language { get; set; } = "Lang_en";
+
+        [JsonProperty("Currencies", Order = 3)]
         public Currency[] Currencies { get; set; } = { new() };
 
-        [JsonProperty("Language")]
-        public string Language { get; set; } = "Lang_en";
+        // try and make this last always if possible
+        [JsonProperty("CommandAliases", Order = 4)]
+        public Aliases Aliases { get; set; } = new();
 
         public static void Load()
         {

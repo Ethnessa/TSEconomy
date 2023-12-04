@@ -8,7 +8,6 @@ namespace TSEconomy.Commands
 {
     public class BalanceCommand : CommandBase
     {
-        public override string[] Aliases { get; set; } = { Localization.TryGetString("balance", ""), Localization.TryGetString("bal", ""), Localization.TryGetString("money", "") };
         public override string[] PermissionNodes { get; set; } = { Permissions.User, Permissions.Balance };
 
         public override void Execute(CommandArgs args)

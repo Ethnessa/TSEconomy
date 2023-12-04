@@ -8,7 +8,6 @@ namespace TSEconomy.Commands
 {
     public class SendCommand : CommandBase
     {
-        public override string[] Aliases { get; set; } = { Localization.TryGetString("send"), Localization.TryGetString("transferto"), Localization.TryGetString("pay") };
         public override string[] PermissionNodes { get; set; } = { Permissions.User, Permissions.Send };
         // send <player> <currency> <amount>
         public override void Execute(CommandArgs args)
@@ -30,7 +29,7 @@ namespace TSEconomy.Commands
                 return;
             }
 
-            if(sendingTo.ID == player.GetUserId())
+            if (sendingTo.ID == player.GetUserId())
             {
                 player.SendErrorMessage(Localization.TryGetString("[i:855]You can't send money to yourself!", "Send"));
                 return;
@@ -69,7 +68,7 @@ namespace TSEconomy.Commands
             }
 
             player.SendMessage(Localization.TryGetString("[i:855]You sent {0} to {1}", "Send").SFormat(currency.GetName(amnt, showName: true), sendingTo.Name), Color.LightGreen);
-            if(receiverPlayer != null)
+            if (receiverPlayer != null)
             {
                 if (receiverPlayer != null)
                 {
