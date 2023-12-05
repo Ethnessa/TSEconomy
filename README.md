@@ -33,7 +33,7 @@ _For a complete list of commands, see [Commands.md](path/to/Commands.md)._
 
 ## Contributing
 
-Contributions are welcome! Please read our [Contributing Guide](path/to/CONTRIBUTING.md) for guidelines on how to contribute. (coming soon)
+Contributions are welcome! Please read our [Contributing Guide](https://github.com/Average-Org/TSEconomy/CONTRIBUTING.md) for guidelines on how to contribute. (coming soon)
 
 ## Support
 
