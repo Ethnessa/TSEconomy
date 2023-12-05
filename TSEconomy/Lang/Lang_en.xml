@@ -1,0 +1,298 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfKeyValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	
+	<!-- Notes: 
+	    - &lt; and &gt; act as replacements for '<' and '>' in XML,
+		- Please only translate the <Value> strings-->
+	
+	<!--Added:
+	    - 'The user {0}'s balance for {1} is {2}.'-->
+	
+	<!-- Description: Balance cmd name-->
+  <KeyValue>
+    <Key>balance</Key>
+    <Value>balance</Value>
+  </KeyValue>
+  <KeyValue>
+	  <!-- Description: Balance cmd alias-->
+    <Key>bal</Key>
+    <Value>bal</Value>
+  </KeyValue>
+  <KeyValue>
+	  <!-- Description: Balance cmd alias-->
+    <Key>money</Key>
+    <Value>money</Value>
+  </KeyValue>
+  <KeyValue>
+	  <!-- Description: Showed to the player when inputing the wrong currency in a command-->
+    <Key>[i:855]That's not a valid currency!</Key>
+    <Value>[i:855]That's not a valid currency!</Value>
+  </KeyValue>
+  <KeyValue>
+	  <!-- Description: showed to the player, {0} is the money the player has-->
+    <Key>[i:855]You have {0}!</Key>
+    <Value>[i:855]You have {0}!</Value>
+  </KeyValue>
+  <KeyValue>
+	  <!-- Description: Bank admin command name-->
+    <Key>bankadmin</Key>
+    <Value>bankadmin</Value>
+  </KeyValue>
+  <KeyValue>
+	  <!-- Description: Bank admin command alias-->
+    <Key>ecoadmin</Key>
+    <Value>ecoadmin</Value>
+  </KeyValue>
+  <KeyValue>
+	  <!-- Description: Bank admin command alias-->
+    <Key>ba</Key>
+    <Value>ba</Value>
+  </KeyValue>
+  <KeyValue>
+	  <!-- Description: Bank admin subcommand-->
+    <Key>setbal</Key>
+    <Value>setbal</Value>
+  </KeyValue>
+  <KeyValue>
+	  <!-- Description: Bank admin subcommand-->
+    <Key>resetbal</Key>
+    <Value>resetbal</Value>
+  </KeyValue>
+  <KeyValue>
+	  <!-- Description: Bank admin subcommand-->
+    <Key>checkbal</Key>
+    <Value>checkbal</Value>
+  </KeyValue>
+  <KeyValue>
+	  <!-- Description: Error showed to the player when searching an inexistant player-->
+    <Key>[i:855]That player does not exist!</Key>
+    <Value>[i:855]That player does not exist!</Value>
+  </KeyValue>
+  <KeyValue>
+	  <!-- Description: Error showed to the player when the currency parameter was not input-->
+    <Key>[i:855]Please enter a currency name!</Key>
+    <Value>[i:855]Please enter a currency name!</Value>
+  </KeyValue>
+	 <!-- Description: Showed to the player when the amount parameter was not set-->
+  <KeyValue>
+    <Key>[i:855]Please enter an amount to set!</Key>
+    <Value>[i:855]Please enter an amount to set!</Value>
+  </KeyValue>
+  <KeyValue>
+	   <!-- Description: Logged message informing that an admin setted a user's balance
+	        {0} is the admin's name, {{0}} is the user's name, {{1}} is the old balance and {{2}} 
+			is the new one-->
+    <Key>The admin {0} set the user {{0}}'s balance from {{1}} to {{2}}.</Key>
+    <Value>The admin {0} set the user {{0}}'s balance from {{1}} to {{2}}.</Value>
+  </KeyValue>
+  <KeyValue>
+	  <!-- Description: Showed to the player after an admin has their balance,
+	        {0} is the currency name, {1} is the new value and {2} is the admin's name-->
+    <Key>[i:855]Your balance for {0} was set to {1} by {2}</Key>
+    <Value>[i:855]Your balance for {0} was set to {1} by {2}</Value>
+  </KeyValue>
+  <KeyValue>
+	  <!-- Description: Showed to the player when they enter an invalid amount-->
+    <Key>[i:855]The amount you entered was invalid!</Key>
+    <Value>[i:855]The amount you entered was invalid!</Value>
+  </KeyValue>
+  <KeyValue>
+	  <!-- Description: Logged message informing that an admin reset a user's balance,
+	        {0} is the admin's name, {{0}} is the user's name, {{1}} is the new balance
+			{{2}} is the old balance-->
+    <Key>The admin {0} reset the user {{0}}'s balance from {{2}} to {{1}}.</Key>
+    <Value>The admin {0} reset the user {{0}}'s balance from {{2}} to {{1}}.</Value>
+  </KeyValue>
+  <KeyValue>
+	  <!-- Description: message showed to the player after their balance has been reset
+	        {0} is the currency name, {1} is the admin's name-->
+    <Key>[i:855]Your balance for {0} was reset to 0 by {1}</Key>
+    <Value>[i:855]Your balance for {0} was reset to 0 by {1}</Value>
+  </KeyValue>
+  <KeyValue>
+	 <!-- Description: list currencies command name -->
+    <Key>listcurr</Key>
+    <Value>listcurr</Value>
+  </KeyValue>
+  <KeyValue>
+	  <!-- Description: list currencies command alias-->
+    <Key>currs</Key>
+    <Value>currs</Value>
+  </KeyValue>
+  <KeyValue>
+	  <!-- Description: list currencies command alias-->
+    <Key>currencies</Key>
+    <Value>currencies</Value>
+  </KeyValue>
+  <KeyValue>
+	  <!-- Description: Header of the list currencies command output, 
+	       {0} is the current page, {1} is the maxpage-->
+    <Key>[i:855] Currencies ({0}/{1})</Key>
+    <Value>[i:855] Currencies ({0}/{1})</Value>
+  </KeyValue>
+  <KeyValue>
+	  <!-- Description: Footer of the list currencies command output,
+	        {0} is the shortest alias for the command {{0}} is the next page.-->
+    <Key>[i:855]Type /{0} {{0}} for more.</Key>
+    <Value>[i:855]Type /{0} {{0}} for more.</Value>
+  </KeyValue>
+  <KeyValue>
+	  <!-- Description: Message showed to the player when there are no currencies to display-->
+    <Key>[i:855]There are no currencies to display.</Key>
+    <Value>[i:855]There are no currencies to display.</Value>
+  </KeyValue>
+  <KeyValue>
+	  <!-- Description: send command name-->
+    <Key>send</Key>
+    <Value>send</Value>
+  </KeyValue>
+  <KeyValue>
+	  <!-- Description: send command alias-->
+    <Key>transferto</Key>
+    <Value>transferto</Value>
+  </KeyValue>
+  <KeyValue>
+	  <!-- Description: send command alias-->
+    <Key>pay</Key>
+    <Value>pay</Value>
+  </KeyValue>
+  <KeyValue>
+	  <!-- Description: Help message when the command is used improperly, {0} is the shortest alias-->
+    <Key>[i:855]Please use the command as follows: /{0} &lt;player&gt; &lt;currency&gt; &lt;amount&gt;</Key>
+    <Value>[i:855]Please use the command as follows: /{0} &lt;player&gt; &lt;currency&gt; &lt;amount&gt;</Value>
+  </KeyValue>
+  <KeyValue>
+	  <!-- Description: Error message showed to the player when they target themselves to transfer money-->
+    <Key>[i:855]You can't send money to yourself!</Key>
+    <Value>[i:855]You can't send money to yourself!</Value>
+  </KeyValue>
+  <KeyValue>
+	  <!-- Description: Error message sent to the player when a negative value is input-->
+    <Key>[i:855]You can't send 0 or less money!</Key>
+    <Value>[i:855]You can't send 0 or less money!</Value>
+  </KeyValue>
+  <KeyValue>
+	  <!-- Description: Error message sent to the player when their Balance is insufficient to send money-->
+    <Key>[i:855]You don't have enough money!</Key>
+    <Value>[i:855]You don't have enough money!</Value>
+  </KeyValue>
+  <KeyValue>
+	  <!-- Description: Success message sent to the player after sending money,
+	        {0} is the amount sent and {1} is th target it was sent to-->
+    <Key>[i:855]You sent {0} to {1}</Key>
+    <Value>[i:855]You sent {0} to {1}</Value>
+  </KeyValue>
+  <KeyValue>
+	  <!-- Description: Message sent to the receiver when they have been sent money,
+	        {0} is the amount sent, {1} is either "" so empty or the next string
+			" by {0}" where {0} is the sender depending on if the command was sent silently-->
+    <Key>[i:855]You have been sent {0}{1}.</Key>
+    <Value>[i:855]You have been sent {0}{1}.</Value>
+  </KeyValue>
+  <KeyValue>
+    <Key> by {0}</Key>
+    <Value> by {0}</Value>
+  </KeyValue>
+  <KeyValue>
+	  <!-- Description: Log message informing that a player has created a bank account,
+	        {0} is the player name, {1} is the bankaccount's currency and {2}
+			is the initial value at which it was created-->
+    <Key>{0} has created a new bank account ({1}), with the initial value of {2}.</Key>
+    <Value>{0} has created a new bank account ({1}), with the initial value of {2}.</Value>
+  </KeyValue>
+  <KeyValue>
+	  <!-- Description: Error sent to the console when the plugin attempted to create 
+	       a bank bank wiht a currency that does not exist-->
+    <Key>Error: tried to create a new bank account with an invalid currency.</Key>
+    <Value>Error: tried to create a new bank account with an invalid currency.</Value>
+  </KeyValue>
+  <KeyValue>
+	  <!-- Description: Log message informing that a player's balance has increased,
+	        {0} is the player's name, {1} is the amount which it increased {2} is the 
+			old balance and {3} is the new balance-->
+    <Key>{0}'s balance has been increased by {1}. Old bal: {2} new bal: {3}</Key>
+    <Value>{0}'s balance has been increased by {1}. Old bal: {2} new bal: {3}</Value>
+  </KeyValue>
+  <KeyValue>
+	  <!-- Description: Log message informing that a player's balance has decreased,
+	        {0} is the player's name, {1} is the amount at which it increased
+			{2} is the old balance and {3} is the new one-->
+    <Key>{0}'s balance has been decreased by {1}. Old bal: {2} new bal: {3}</Key>
+    <Value>{0}'s balance has been decreased by {1}. Old bal: {2} new bal: {3}</Value>
+  </KeyValue>
+  <KeyValue>
+	  <!-- Description: Log message informing that a player's balance has been
+	        set to a value, {0} is the player's name, {1} is the value it was set to
+			and {2} is the old balance-->
+    <Key>{0}'s balance has been set to {1}. Old bal: {2}</Key>
+    <Value>{0}'s balance has been set to {1}. Old bal: {2}</Value>
+  </KeyValue>
+  <KeyValue>
+	  <!-- Description: Log message informing that the SQL database has successfully
+	       Connected-->
+    <Key>TSEconomy database connected! (MySQL)</Key>
+    <Value>TSEconomy database connected! (MySQL)</Value>
+  </KeyValue>
+  <KeyValue>
+	  <!-- Description: Log mesage informing that the SQL database
+	        had experienced an error while loading-->
+    <Key>TSEconomy experienced a database error! (MySQL)</Key>
+    <Value>TSEconomy experienced a database error! (MySQL)</Value>
+  </KeyValue>
+  <KeyValue>
+	  <!-- Description: Log message informing that the SQLite database has successfully
+	       Connected-->
+    <Key>TSEconomy database connected! (SQLite)</Key>
+    <Value>TSEconomy database connected! (SQLite)</Value>
+  </KeyValue>
+      <!-- Description: Log mesage informing that the SQLite database
+	        had experienced an error while loading-->
+  <KeyValue>
+    <Key>TSEconomy experienced a database error! (SQLite)</Key>
+    <Value>TSEconomy experienced a database error! (SQLite)</Value>
+  </KeyValue>
+  <KeyValue>
+	  <!-- Description: Log message informing that the plugin has created a new world account, 
+	       {0} is the server itself, {1} is the currency and {2} is the initial value-->
+    <Key>{0} has created a new world account for the server ({1}), initial value was set to {2}</Key>
+    <Value>{0} has created a new world account for the server ({1}), initial value was set to {2}</Value>
+  </KeyValue>
+  <KeyValue>
+	  <!-- Description: Log message informing that a player has their bank acccount deleted,
+	       {0} is the player's name-->
+    <Key>{0} had their bank account deleted.</Key>
+    <Value>{0} had their bank account deleted.</Value>
+  </KeyValue>
+  <KeyValue>
+	  <!-- Description: Log message informing that a player has transfered
+	       Money to another player, {{0}} is the player's name, {{1}} is the
+		   amount, {0} is the receiver's name, {{2}} is the old balance and
+		   {{3}} is the new one-->
+    <Key>{{0}} has transfered {{1}} to {0}. Old bal: {{2}} new bal {{3}}</Key>
+    <Value>{{0}} has transfered {{1}} to {0}. Old bal: {{2}} new bal {{3}}</Value>
+  </KeyValue>
+  <KeyValue>
+	  <!-- Description: Log message informing that a player has received funds from another player,
+	       {{0}} is the player's name, {{1}} is the amount received, {0} is the sender's name
+		   {{2}} is the old balance and {{3}} is the new one-->
+    <Key>{{0}} has received {{1}} from {0}. Old bal: {{2}} new bal {{3}}</Key>
+    <Value>{{0}} has received {{1}} from {0}. Old bal: {{2}} new bal {{3}}</Value>
+  </KeyValue>
+  <KeyValue>
+	  <!-- Description: Message sent to the player after reloading the plugin-->
+    <Key>[i:855]Reloaded config.</Key>
+    <Value>[i:855]Reloaded config.</Value>
+  </KeyValue>
+  <KeyValue>
+	  <!-- Description: Message sent to the console after successfully loading Localization-->
+    <Key>Localization succesfully loaded from file {0}!</Key>
+    <Value>Localization succesfully loaded from file {0}!</Value>
+  </KeyValue>
+  <KeyValue>
+      <!-- Description: Showed when showing the balance of another player,
+	       {0} is the player's name, {1} is the currency name, {2} is the 
+	   	   money's value-->
+      <Key>[i:855]The user {0}'s balance for {1} is {2}.</Key>
+	  <Value>[i:855]The user {0}'s balance for {1} is {2}.</Value>
+  </KeyValue>
+</ArrayOfKeyValue>
