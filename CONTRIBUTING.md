@@ -32,10 +32,6 @@ PRs are the best way to propose changes. Here's a quick guide:
 4. **Write a convincing description of your PR** and why we should merge it.
 5. **We'll check it out when we get the time!**
 
-## Code of Conduct
-
-Participation in the TSEconomy community is governed by our [Code of Conduct](CODE_OF_CONDUCT.md). Please read and abide by it.
-
 ## Our Development Process
 
 Our `main` branch is always stable. We use GitHub to host code, to track issues and feature requests, as well as accept pull requests.
