@@ -1,4 +1,4 @@
-name: .NET
+name: TSEconomy Preview Build
 
 on:
   push:
@@ -36,3 +36,35 @@ jobs:
       with:
         name: TSEconomyBuild
         path: ./TSEconomyBuild/
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Download Artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: TSEconomyBuild
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: preview-${{ github.run_number }}
+        release_name: Preview Release ${{ github.run_number }}
+        draft: false
+        prerelease: true
+
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./TSEconomyBuild.zip
+        asset_name: TSEconomyBuild-Preview-${{ github.run_number }}.zip
+        asset_content_type: application/zip
