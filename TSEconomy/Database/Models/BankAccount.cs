@@ -4,7 +4,6 @@ using TSEconomy.Configuration.Models;
 using TSEconomy.Database.Models.Properties;
 using TSEconomy.Lang;
 using TShockAPI;
-using TShockAPI.DB;
 
 namespace TSEconomy.Database.Models
 {
@@ -30,8 +29,9 @@ namespace TSEconomy.Database.Models
         private double _balance;
 
         [Column("Balance")]
+
         public double Balance { get { return _balance; } private set { } }
-        
+
         public static BankAccount? TryCreateNewAccount(double initialbalance, string internalCurrencyName, int userID, BankAccountProperties flags = BankAccountProperties.Default,
                                                        string transLog = "{0} has created a new bank account ({1}), with the initial value of {2}.")
         {
@@ -65,7 +65,7 @@ namespace TSEconomy.Database.Models
             if (acc.IsWorldAccount())
                 return acc;
 
-            Api.AddTransaction(userID, internalCurrencyName, initialbalance, transLog.SFormat(Helpers.GetAccountName(userID), internalCurrencyName, initialbalance), 
+            Api.AddTransaction(userID, internalCurrencyName, initialbalance, transLog.SFormat(Helpers.GetAccountName(userID), internalCurrencyName, initialbalance),
                                TransactionProperties.Set);
 
             return acc;
@@ -88,7 +88,7 @@ namespace TSEconomy.Database.Models
             if (IsWorldAccount())
                 return true;
 
-            Api.AddTransaction(UserID, InternalCurrencyName, amount, transLog.SFormat(Helpers.GetAccountName(UserID), amount, Balance - amount, Balance), 
+            Api.AddTransaction(UserID, InternalCurrencyName, amount, transLog.SFormat(Helpers.GetAccountName(UserID), amount, Balance - amount, Balance),
                                TransactionProperties.Add);
 
             return true;
@@ -141,7 +141,7 @@ namespace TSEconomy.Database.Models
 
         public bool HasPermission(string perm)
         {
-            return TShock.Groups.groups.First(i => i.Name == TShock.UserAccounts.GetUserAccountByID(UserID).Group).HasPermission(perm); 
+            return TShock.Groups.groups.First(i => i.Name == TShock.UserAccounts.GetUserAccountByID(UserID).Group).HasPermission(perm);
         }
 
         public bool HasEnough(double amount)
