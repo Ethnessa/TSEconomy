@@ -29,7 +29,7 @@ jobs:
         mkdir -p ./TSEconomyBuild/ServerPlugins
         mkdir -p ./TSEconomyBuild/bin
         mv ./TSEconomy/bin/Debug/net6.0/* ./TSEconomyBuild/ServerPlugins/
-        mv ./deps/* ./TSEconomyBuild/bin/
+        mv ./TSEconomy/deps/* ./TSEconomyBuild/bin/
 
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3.1.3
