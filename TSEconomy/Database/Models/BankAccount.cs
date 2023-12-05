@@ -1,6 +1,7 @@
 ﻿using PetaPoco;
 using Terraria;
 using TSEconomy.Configuration.Models;
+using TSEconomy.Database.Models.Properties;
 using TSEconomy.Lang;
 using TShockAPI;
 using TShockAPI.DB;
@@ -29,7 +30,7 @@ namespace TSEconomy.Database.Models
         private double _balance;
 
         [Column("Balance")]
-        public double Balance { get { return _balance; } set { } }
+        public double Balance { get { return _balance; } private set { } }
         
         public static BankAccount? TryCreateNewAccount(double initialbalance, string internalCurrencyName, int userID, BankAccountProperties flags = BankAccountProperties.Default,
                                                        string transLog = "{0} has created a new bank account ({1}), with the initial value of {2}.")
@@ -59,7 +60,7 @@ namespace TSEconomy.Database.Models
 
             acc.SetBalance(initialbalance);
 
-            Api.DB.Insert(acc);
+            Api.InsertBankAccount(acc);
 
             if (acc.IsWorldAccount())
                 return acc;
@@ -113,14 +114,10 @@ namespace TSEconomy.Database.Models
             return true;
         }
 
+        // UNDONE
         /// <summary>
         /// once implemented we'll want tryremovebalance and tryaddbalance to use it to with the world account. 
         /// </summary>
-        public void TryTransferTo(BankAccount receiver)
-        {
-            throw new NotImplementedException();
-        }
-
         public void SetBalance(double amount, string transLog = "{0}'s balance has been set to {1}. Old bal: {2}")
         {
             if(transLog == "{0}'s balance has been set to {1}. Old bal: {2}")

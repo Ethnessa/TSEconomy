@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using TSEconomy.Configuration.Models;
-using TSEconomy.Extentions;
+using TSEconomy.Extensions;
 using TSEconomy.Lang;
 using TShockAPI;
 

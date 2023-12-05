@@ -20,7 +20,6 @@
             return (DisplayName == "System-Cash" || InternalName == "sys" || Symbol == "^");
         }
 
-
         public static Currency? GetFirst()
         {
             return Api.Currencies.ElementAtOrDefault(0);
