@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TSEconomy.Configuration.Models;
+﻿using TSEconomy.Lang;
 using TShockAPI;
 
 namespace TSEconomy.Commands
 {
-    public class ListCurrenciesCommand : CommandBase
+    internal class ListCurrenciesCommand : CommandBase
     {
-        public override string[] Aliases { get; set; } = { "listcurr", "currs", "currencies" };
         public override string[] PermissionNodes { get; set; } = { Permissions.User, Permissions.ListCurrencies };
 
         public override void Execute(CommandArgs args)
@@ -26,12 +20,12 @@ namespace TSEconomy.Commands
 
             PaginationTools.SendPage(player, page, currNames, pageSize, new PaginationTools.Settings()
             {
-                HeaderFormat = $"Currencies ({page}/{(currNames.Count() / pageSize)+1})",
+                HeaderFormat = Localization.TryGetString("[i:855] Currencies ({0}/{1})").SFormat(page, (currNames.Count() / pageSize) + 1),
                 IncludeFooter = ((currNames.Count() / pageSize) + 1) > page,
-                FooterFormat = $"Type /{ShortestAlias} {{0}} for more.",
-                NothingToDisplayString = "There are no currencies to display."
+                FooterFormat = Localization.TryGetString("[i:855]Type /{0} {{0}} for more.").SFormat(ShortestAlias),
+                NothingToDisplayString = Localization.TryGetString("[i:855]There are no currencies to display.", "ListCurrencies")
             });
-            
+
         }
     }
 }

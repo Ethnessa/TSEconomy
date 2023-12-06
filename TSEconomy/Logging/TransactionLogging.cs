@@ -1,4 +1,5 @@
 ﻿using TSEconomy.Database.Models;
+using TSEconomy.Database.Models.Properties;
 
 namespace TSEconomy.Logging
 {

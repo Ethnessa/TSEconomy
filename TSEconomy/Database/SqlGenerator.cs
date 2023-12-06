@@ -1,7 +1,7 @@
 ﻿using PetaPoco;
 using System.Reflection;
 using System.Text;
-using TSEconomy.Database.Models;
+using TSEconomy.Database.Models.Properties;
 
 namespace TSEconomy.Database
 {
@@ -43,10 +43,12 @@ namespace TSEconomy.Database
         {
             // Simplified mapping, needs to be expanded based on actual requirements
             if (type == typeof(int) || type == typeof(BankAccountProperties) 
-                || type == typeof(TransactionProperties) ) return "INTEGER";
+                || type == typeof(TransactionProperties)) return "INTEGER";
             if (type == typeof(double)) return "REAL";
             if (type == typeof(string)) return (dbProvider == DBType.SQLite ? "TEXT" : "VARCHAR(255)");
             if (type == typeof(DateTime)) return "DATETIME";
+            if (type == typeof(byte[])) return "BLOB";
+            if (type == typeof(bool)) return (dbProvider == DBType.MySQL ? "BOOLEAN" : "INTEGER");
 
             throw new NotSupportedException($"Type {type} not supported.");
         }
