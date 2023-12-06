@@ -24,16 +24,16 @@ namespace TSEconomy.Configuration.Models
         }
 
         [JsonProperty("Balance")]
-        internal string[] BalanceAliases { get; set; } = { "balance", "bal", "money" };
+        public string[] BalanceAliases { get; set; } = { "balance", "bal", "money" };
 
         [JsonProperty("BankAdmin")]
-        internal string[] BankAdmin { get; set; } = { "bankadmin", "banka", "ecoadmin", "ba" };
+        public string[] BankAdmin { get; set; } = { "bankadmin", "banka", "ecoadmin", "ba" };
 
         [JsonProperty("ListCurrencies")]
-        internal string[] ListCurrencies { get; set; } = { "listcurrencies", "listcur", "listc", "lc", "currencies" };
+        public string[] ListCurrencies { get; set; } = { "listcurrencies", "listcur", "listc", "lc", "currencies" };
 
         [JsonProperty("Send")]
-        internal string[] Send { get; set; } = { "send", "pay", "give" };
+        public string[] Send { get; set; } = { "send", "pay", "give" };
 
     }
 }

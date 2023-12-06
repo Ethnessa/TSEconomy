@@ -1,11 +1,5 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
+﻿using System.Globalization;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 using Terraria.Localization;
@@ -36,37 +30,37 @@ namespace TSEconomy.Lang
 
         public static void SetupLanguage()
         {
-            string LocalizationDirectory = TSEconomy.Config.LocalizationDirectory;
+            string localizationDirectory = TSEconomy.Config.LocalizationDirectory;
 
-            if (!Directory.Exists(LocalizationDirectory))
-                Directory.CreateDirectory(LocalizationDirectory);
+            if (!Directory.Exists(localizationDirectory))
+                Directory.CreateDirectory(localizationDirectory);
 
             getFileName(out string fileName);
 
-            if (!File.Exists(Path.Combine(LocalizationDirectory, fileName)))
+            if (!File.Exists(Path.Combine(localizationDirectory, fileName)))
             {
                 var assembly = Assembly.GetExecutingAssembly();
 
-                string FileResourceName = assembly.GetManifestResourceNames().Single(str => str.EndsWith(fileName));
+                string fileResourceName = assembly.GetManifestResourceNames().Single(str => str.EndsWith(fileName));
 
-                var FileStream = assembly.GetManifestResourceStream(FileResourceName);
+                var fileStream = assembly.GetManifestResourceStream(fileResourceName);
 
-                TextReader FileReader = new StreamReader(FileStream);
+                TextReader fileReader = new StreamReader(fileStream);
 
-                File.WriteAllText(Path.Combine(LocalizationDirectory, fileName), FileReader.ReadToEnd());
+                File.WriteAllText(Path.Combine(localizationDirectory, fileName), fileReader.ReadToEnd());
 
             }
 
             XmlSerializer serializer = new XmlSerializer(typeof(List<KeyValue>));
 
-            using(XmlReader xmlReader = XmlReader.Create(Path.Combine(LocalizationDirectory, fileName)))
+            using(XmlReader xmlReader = XmlReader.Create(Path.Combine(localizationDirectory, fileName)))
             {
                 List<KeyValue> list= (List<KeyValue>)serializer.Deserialize(xmlReader);
 
                 LocalizedPluginTexts = list.ToDictionary(i => i.Key, i => i.Value);
             }
 
-            TShock.Log.ConsoleInfo(TryGetString("Localization succesfully loaded from file {0}!", "Lang").SFormat(Path.Combine(LocalizationDirectory, fileName)));
+            TShock.Log.ConsoleInfo(TryGetString("Localization succesfully loaded from file {0}!", "Lang").SFormat(Path.Combine(localizationDirectory, fileName)));
 
         }
 
@@ -142,11 +136,9 @@ namespace TSEconomy.Lang
 
             switch (cultureInfo.Name)
             {
-                case "es_ES":
-                case "es-ES":
+                case string s when s.StartsWith("es"):
                     return "Lang_es";
-                case "ru_RU":
-                case "ru-RU":
+                case string s when s.StartsWith("ru"):
                     return "Lang_ru";
                 default:
                     return "Lang_en";
