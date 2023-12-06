@@ -2,7 +2,7 @@
 
 namespace TSEconomy.Commands
 {
-    public abstract class CommandBase
+    internal abstract class CommandBase
     {
         public string[] Aliases => TSEconomy.Config.Aliases.GetAliases(this);
         public abstract string[] PermissionNodes { get; set; }

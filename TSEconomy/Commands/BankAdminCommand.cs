@@ -4,7 +4,7 @@ using TShockAPI;
 
 namespace TSEconomy.Commands
 {
-    public class BankAdminCommand : CommandBase
+    internal class BankAdminCommand : CommandBase
     {
         public override string[] PermissionNodes { get; set; } = { Permissions.Admin };
 

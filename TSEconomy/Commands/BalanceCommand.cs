@@ -6,7 +6,7 @@ using TShockAPI;
 
 namespace TSEconomy.Commands
 {
-    public class BalanceCommand : CommandBase
+    internal class BalanceCommand : CommandBase
     {
         public override string[] PermissionNodes { get; set; } = { Permissions.User, Permissions.Balance };
 

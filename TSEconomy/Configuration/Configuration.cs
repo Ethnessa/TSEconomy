@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using TSEconomy.Configuration.Models;
+using TSEconomy.Lang;
 using TShockAPI;
 
 namespace TSEconomy.Configuration
@@ -15,15 +16,17 @@ namespace TSEconomy.Configuration
 
         [JsonProperty("TransactionLogPath", Order = 1)]
         public string TransactionLogPath { get; set; } = Path.Combine(TSEconomy.PluginDirectory, "TSEconomyLogs");
+        [JsonProperty("LocalizedTextsPath", Order = 2)]
+        public string LocalizationDirectory { get; set; } = Path.Combine(TSEconomy.PluginDirectory, "Localization");
 
-        [JsonProperty("Language", Order = 2)]
-        public string Language { get; set; } = "Lang_en";
+        [JsonProperty("Language", Order = 3)]
+        public string Language { get; set; } = Localization.GetCurrentlyUsedLanguage();
 
-        [JsonProperty("Currencies", Order = 3)]
+        [JsonProperty("Currencies", Order = 4)]
         public Currency[] Currencies { get; set; } = { new() };
 
         // try and make this last always if possible
-        [JsonProperty("CommandAliases", Order = 4)]
+        [JsonProperty("CommandAliases", Order = 5)]
         public Aliases Aliases { get; set; } = new();
 
         public static void Load()

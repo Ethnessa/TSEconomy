@@ -6,7 +6,7 @@ using TShockAPI;
 
 namespace TSEconomy.Commands
 {
-    public class SendCommand : CommandBase
+    internal class SendCommand : CommandBase
     {
         public override string[] PermissionNodes { get; set; } = { Permissions.User, Permissions.Send };
         // send <player> <currency> <amount>

@@ -1,6 +1,6 @@
 ﻿namespace TSEconomy.Commands
 {
-    public class Commands
+    internal class Commands
     {
         public static void RegisterAll()
         {

@@ -1,12 +1,14 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
+using Terraria.Localization;
 using TShockAPI;
 
 namespace TSEconomy.Lang
@@ -26,16 +28,16 @@ namespace TSEconomy.Lang
             Value = value;
         }
     }
-    public static class Localization
+    internal static class Localization
     {
-        public static List<string> supportedLanguages = new List<string> { "Lang_en", "Lang_es" };
-
-        private static string LocalizationDirectory = Path.Combine(TSEconomy.PluginDirectory, "Localization");
+        public static List<string> supportedLanguages = new List<string> { "Lang_en", "Lang_es", "Lang_ru" };
 
         private static Dictionary<string, string> LocalizedPluginTexts = new();
 
         public static void SetupLanguage()
         {
+            string LocalizationDirectory = TSEconomy.Config.LocalizationDirectory;
+
             if (!Directory.Exists(LocalizationDirectory))
                 Directory.CreateDirectory(LocalizationDirectory);
 
@@ -93,6 +95,61 @@ namespace TSEconomy.Lang
                 name = "Lang_en.xml";
 
                 TShock.Log.ConsoleError($"[TSEconomy Lang] Set value of the 'Language' property in configs is not valid, defaulting to 'en-CA'.\n here are the supported languages: {string.Join(", ", supportedLanguages)}");
+            }
+        }
+        /// <summary>
+        /// We are getting the cultureInfo of the server the same way TShock's I18n TranslationCultureInfo
+        /// does, this is because TShockAPI.I18n is internal so we cant access it
+        /// </summary>
+        /// <returns>a "Lang_la" style language code gotten the same way TShock does</returns>
+        public static string GetCurrentlyUsedLanguage()
+        {
+            CultureInfo cultureInfo = null;
+
+            string environmentVariable = Environment.GetEnvironmentVariable("TSHOCK_LANGUAGE");
+
+            if (environmentVariable != null)
+            {
+                cultureInfo = new CultureInfo(environmentVariable);
+            }
+
+            else if (Terraria.Program.LaunchParameters.TryGetValue("-lang", out var value) && int.TryParse(value, out var result) && GameCulture._legacyCultures.TryGetValue(result, out var value2))
+            {
+                cultureInfo = Redirect(value2.CultureInfo);
+            }
+
+            else if (Terraria.Program.LaunchParameters.TryGetValue("-language", out var languageArg))
+            {
+                GameCulture gameCulture = GameCulture._legacyCultures.Values.SingleOrDefault((GameCulture c) => c.Name == languageArg);
+                if (gameCulture != null)
+                {
+                    cultureInfo = Redirect(gameCulture.CultureInfo);
+                }
+            }
+
+            if(cultureInfo == null)
+                cultureInfo = CultureInfo.CurrentUICulture;
+
+            static CultureInfo Redirect(CultureInfo cultureInfo)
+            {
+                if (!(cultureInfo.Name == "zh-Hans"))
+                {
+                    return cultureInfo;
+                }
+
+                return new CultureInfo("zh-CN");
+            }
+
+            switch (cultureInfo.Name)
+            {
+                case "es_ES":
+                case "es-ES":
+                    return "Lang_es";
+                case "ru_RU":
+                case "ru-RU":
+                    return "Lang_ru";
+                default:
+                    return "Lang_en";
             }
         }
     }

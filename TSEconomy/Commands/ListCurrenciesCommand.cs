@@ -3,7 +3,7 @@ using TShockAPI;
 
 namespace TSEconomy.Commands
 {
-    public class ListCurrenciesCommand : CommandBase
+    internal class ListCurrenciesCommand : CommandBase
     {
         public override string[] PermissionNodes { get; set; } = { Permissions.User, Permissions.ListCurrencies };
 

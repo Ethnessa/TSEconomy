@@ -8,21 +8,6 @@
 	<!--Added:
 	    - 'The user {0}'s balance for {1} is {2}.'-->
 	
-	<!-- Description: Balance cmd name-->
-  <KeyValue>
-    <Key>balance</Key>
-    <Value>balance</Value>
-  </KeyValue>
-  <KeyValue>
-	  <!-- Description: Balance cmd alias-->
-    <Key>bal</Key>
-    <Value>bal</Value>
-  </KeyValue>
-  <KeyValue>
-	  <!-- Description: Balance cmd alias-->
-    <Key>money</Key>
-    <Value>money</Value>
-  </KeyValue>
   <KeyValue>
 	  <!-- Description: Showed to the player when inputing the wrong currency in a command-->
     <Key>[i:855]That's not a valid currency!</Key>
@@ -32,21 +17,6 @@
 	  <!-- Description: showed to the player, {0} is the money the player has-->
     <Key>[i:855]You have {0}!</Key>
     <Value>[i:855]¡Tienes {0} en tu banco!</Value>
-  </KeyValue>
-  <KeyValue>
-	  <!-- Description: Bank admin command name-->
-    <Key>bankadmin</Key>
-    <Value>bankadmin</Value>
-  </KeyValue>
-  <KeyValue>
-	  <!-- Description: Bank admin command alias-->
-    <Key>ecoadmin</Key>
-    <Value>ecoadmin</Value>
-  </KeyValue>
-  <KeyValue>
-	  <!-- Description: Bank admin command alias-->
-    <Key>ba</Key>
-    <Value>ba</Value>
   </KeyValue>
   <KeyValue>
 	  <!-- Description: Bank admin subcommand-->
@@ -110,21 +80,6 @@
     <Value>[i:855]Su saldo de {0} fue restablecido a 0 por {1}</Value>
   </KeyValue>
   <KeyValue>
-	 <!-- Description: list currencies command name -->
-    <Key>listcurr</Key>
-    <Value>listcurr</Value>
-  </KeyValue>
-  <KeyValue>
-	  <!-- Description: list currencies command alias-->
-    <Key>currs</Key>
-    <Value>currs</Value>
-  </KeyValue>
-  <KeyValue>
-	  <!-- Description: list currencies command alias-->
-    <Key>currencies</Key>
-    <Value>currencies</Value>
-  </KeyValue>
-  <KeyValue>
 	  <!-- Description: Header of the list currencies command output, 
 	       {0} is the current page, {1} is the maxpage-->
     <Key>[i:855] Currencies ({0}/{1})</Key>
@@ -140,21 +95,6 @@
 	  <!-- Description: Message showed to the player when there are no currencies to display-->
     <Key>[i:855]There are no currencies to display.</Key>
     <Value>[i:855]No hay monedas para mostrar.</Value>
-  </KeyValue>
-  <KeyValue>
-	  <!-- Description: send command name-->
-    <Key>send</Key>
-    <Value>send</Value>
-  </KeyValue>
-  <KeyValue>
-	  <!-- Description: send command alias-->
-    <Key>transferto</Key>
-    <Value>transferto</Value>
-  </KeyValue>
-  <KeyValue>
-	  <!-- Description: send command alias-->
-    <Key>pay</Key>
-    <Value>pay</Value>
   </KeyValue>
   <KeyValue>
 	  <!-- Description: Help message when the command is used improperly, {0} is the shortest alias-->

@@ -6,7 +6,7 @@ namespace TSEconomy.Configuration.Models
     [JsonObject(MemberSerialization.OptIn)]
     public class Aliases
     {
-        public string[] GetAliases(CommandBase command) 
+        internal string[] GetAliases(CommandBase command) 
         {
             switch (command)
             {
@@ -24,16 +24,16 @@ namespace TSEconomy.Configuration.Models
         }
 
         [JsonProperty("Balance")]
-        public string[] BalanceAliases { get; set; } = { "balance", "bal", "money" };
+        internal string[] BalanceAliases { get; set; } = { "balance", "bal", "money" };
 
         [JsonProperty("BankAdmin")]
-        public string[] BankAdmin { get; set; } = { "bankadmin", "banka", "ecoadmin", "ba" };
+        internal string[] BankAdmin { get; set; } = { "bankadmin", "banka", "ecoadmin", "ba" };
 
         [JsonProperty("ListCurrencies")]
-        public string[] ListCurrencies { get; set; } = { "listcurrencies", "listcur", "listc", "lc", "currencies" };
+        internal string[] ListCurrencies { get; set; } = { "listcurrencies", "listcur", "listc", "lc", "currencies" };
 
         [JsonProperty("Send")]
-        public string[] Send { get; set; } = { "send", "pay", "give" };
+        internal string[] Send { get; set; } = { "send", "pay", "give" };
 
     }
 }
