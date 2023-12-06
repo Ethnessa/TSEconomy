@@ -121,8 +121,7 @@ namespace TSEconomy.Lang
                 }
             }
 
-            if(cultureInfo == null)
-                cultureInfo = CultureInfo.CurrentUICulture;
+            cultureInfo ??= CultureInfo.CurrentUICulture;
 
             static CultureInfo Redirect(CultureInfo cultureInfo)
             {
@@ -134,15 +133,12 @@ namespace TSEconomy.Lang
                 return new CultureInfo("zh-CN");
             }
 
-            switch (cultureInfo.Name)
+            return cultureInfo.Name switch
             {
-                case string s when s.StartsWith("es"):
-                    return "Lang_es";
-                case string s when s.StartsWith("ru"):
-                    return "Lang_ru";
-                default:
-                    return "Lang_en";
-            }
+                string s when s.StartsWith("es") => "Lang_es",
+                string s when s.StartsWith("ru") => "Lang_ru",
+                _ => "Lang_en",
+            };
         }
     }
 }

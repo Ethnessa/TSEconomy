@@ -51,10 +51,8 @@ namespace TSEconomy.Configuration
 
         public static void Save()
         {
-            if (Instance == null)
-            {
-                Instance = new Configuration();
-            }
+            Instance ??= new Configuration();
+
             if(!Directory.Exists(TSEconomy.PluginDirectory))
                 Directory.CreateDirectory(TSEconomy.PluginDirectory);
 

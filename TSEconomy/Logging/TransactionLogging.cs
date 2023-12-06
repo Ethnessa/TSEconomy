@@ -34,12 +34,11 @@ namespace TSEconomy.Logging
                 File.Create(sessionLogFile).Close(); // Close the file stream after creating it.
             }
 
-            using (StreamWriter writer = File.AppendText(sessionLogFile))
-            {
-                string flag = trans.Flags == TransactionProperties.Set ? "Set" : "Add";
+            using StreamWriter writer = File.AppendText(sessionLogFile);
 
-                writer.WriteLine($"[{trans.Timestamp}] [{flag}] [Cur:{trans.InternalCurrencyName}] [ID:{trans.UserID}]: {trans.TransactionDetails}");
-            }
+            string flag = trans.Flags == TransactionProperties.Set ? "Set" : "Add";
+
+            writer.WriteLine($"[{trans.Timestamp}] [{flag}] [Cur:{trans.InternalCurrencyName}] [ID:{trans.UserID}]: {trans.TransactionDetails}");
         }
 
 

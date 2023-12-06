@@ -102,7 +102,7 @@ namespace TSEconomy.Commands
                     }
                 case string s when s == Localization.TryGetString("checkbal"):
                     {
-                        var affectedUser = Helpers.GetUser(parameters.ElementAtOrDefault(0), out var affectedPlayer);
+                        var affectedUser = Helpers.GetUser(parameters.ElementAtOrDefault(0), out _);
 
                         if (affectedUser == null)
                         {

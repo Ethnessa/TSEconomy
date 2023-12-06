@@ -68,14 +68,9 @@ namespace TSEconomy.Commands
             }
 
             player.SendMessage(Localization.TryGetString("[i:855]You sent {0} to {1}", "Send").SFormat(currency.GetName(amnt, showName: true), sendingTo.Name), Color.LightGreen);
-            if (receiverPlayer != null)
-            {
-                if (receiverPlayer != null)
-                {
-                    receiverPlayer.SendMessage(Localization.TryGetString("[i:855]You have been sent {0}{1}.", "plugin")
-                                  .SFormat(currency.GetName(amnt, showName: true), args.Silent ? "" : Localization.TryGetString(" by {0}").SFormat(player.Name)), Color.LightGreen);
-                }
-            }
+
+            receiverPlayer?.SendMessage(Localization.TryGetString("[i:855]You have been sent {0}{1}.", "plugin")
+                              .SFormat(currency.GetName(amnt, showName: true), args.Silent ? "" : Localization.TryGetString(" by {0}").SFormat(player.Name)), Color.LightGreen);
         }
     }
 }

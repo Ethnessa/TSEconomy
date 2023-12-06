@@ -8,19 +8,14 @@ namespace TSEconomy.Configuration.Models
     {
         internal string[] GetAliases(CommandBase command) 
         {
-            switch (command)
+            return command switch
             {
-                case BalanceCommand:
-                    return BalanceAliases;
-                case BankAdminCommand:
-                    return BankAdmin;
-                case ListCurrenciesCommand:
-                    return ListCurrencies;
-                case SendCommand:
-                    return Send;
-                default:
-                    return new string[0];
-            }
+                BalanceCommand => BalanceAliases,
+                BankAdminCommand => BankAdmin,
+                ListCurrenciesCommand => ListCurrencies,
+                SendCommand => Send,
+                _ => Array.Empty<string>(),
+            };
         }
 
         [JsonProperty("Balance")]

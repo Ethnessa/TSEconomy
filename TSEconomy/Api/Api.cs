@@ -20,15 +20,15 @@ namespace TSEconomy
         /// <summary>
         /// Private reference to our database, can only be accessed from Api class members
         /// </summary>
-        private static IDatabase s_DB => TSEconomy.s_DB.DB;
+        private static IDatabase DB => TSEconomy.DB.DB;
         
         // ? why are we splitting these?
-        private static List<Currency> s_currencies = new List<Currency>();
+        private static List<Currency> currencies = new List<Currency>();
         public static List<Currency> Currencies
         {
             get
             {
-                return s_currencies.Concat(Config.Currencies).ToList();
+                return currencies.Concat(Config.Currencies).ToList();
             }
         }
 
@@ -43,7 +43,7 @@ namespace TSEconomy
         {
             get
             {
-                return s_DB.Query<BankAccount>("SELECT * FROM BankAccounts").ToList();
+                return DB.Query<BankAccount>("SELECT * FROM BankAccounts").ToList();
             }
         }
 
@@ -65,12 +65,12 @@ namespace TSEconomy
 
         public static List<BankAccount> GetAllBankAccountsByCurrency(string currencyInternalName)
         {
-            return s_DB.Query<BankAccount>("SELECT * FROM BankAccounts Where Currency = @0", currencyInternalName).ToList();
+            return DB.Query<BankAccount>("SELECT * FROM BankAccounts Where Currency = @0", currencyInternalName).ToList();
         }
 
         public static void InsertTransaction(Database.Models.Transaction trans)
         {
-            s_DB.Insert(trans);
+            DB.Insert(trans);
             TransactionLogging.Log(trans);
         }
 
@@ -81,11 +81,11 @@ namespace TSEconomy
 
         public static bool HasBankAccount(int userId, Currency curr)
         {
-            return s_DB.ExecuteScalar<int>("SELECT COUNT(*) FROM BankAccounts Where UserID = @0 AND Currency = @1", userId, curr.InternalName) > 0;
+            return DB.ExecuteScalar<int>("SELECT COUNT(*) FROM BankAccounts Where UserID = @0 AND Currency = @1", userId, curr.InternalName) > 0;
         }
         public static BankAccount GetBankAccount(int userId, Currency curr)
         {
-            var bankAccount = s_DB.FirstOrDefault<BankAccount>("SELECT * FROM BankAccounts WHERE UserID = @0 AND Currency = @1", userId, curr.InternalName);
+            var bankAccount = DB.FirstOrDefault<BankAccount>("SELECT * FROM BankAccounts WHERE UserID = @0 AND Currency = @1", userId, curr.InternalName);
             if (bankAccount == null)
             {
                 return BankAccount.TryCreateNewAccount(0, curr.InternalName, userId);
@@ -100,18 +100,18 @@ namespace TSEconomy
 
         public static void UpdateBankAccount(BankAccount account)
         {
-            s_DB.Update(account);
+            DB.Update(account);
         }
 
         public static void InsertBankAccount(BankAccount account)
         {
-            s_DB.Insert(account);
+            DB.Insert(account);
         }
 
         public static void DeleteBankAccount(BankAccount account)
         {
             AddTransaction(account.ID, account.InternalCurrencyName, 0, Localization.TryGetString("{0} had their bank account deleted.").SFormat(Helpers.GetAccountName(account.ID)), TransactionProperties.Set);
-            s_DB.Delete(account);
+            DB.Delete(account);
         }
 
         public static bool TryTransferTo(BankAccount payee, BankAccount receiver, double amount)
