@@ -1,20 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using TSEconomy.Configuration.Models;
+﻿using TSEconomy.Configuration.Models;
 using TSEconomy.Database.Models;
 using TShockAPI;
 
-namespace TSEconomy.Extentions
+namespace TSEconomy.Extensions
 {
-    public static class TSPlayerExtentions
+    public static class TSPlayerExtensions
     {
         // these are mostly to avoid writing lots of text just to get bank accounts &
         // to avoid getting null references with manipulating Server Accounts.
-
         public static int GetUserId(this TSPlayer player)
         {
             if (!player.RealPlayer)

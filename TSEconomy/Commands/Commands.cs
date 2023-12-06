@@ -1,20 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TSEconomy.Commands
+﻿namespace TSEconomy.Commands
 {
-    public class Commands
+    internal class Commands
     {
         public static void RegisterAll()
         {
-            foreach (CommandBase cmd in List)
+            foreach (CommandBase cmd in List.Where(x=>x.Disabled==false))
             {
                 TShockAPI.Commands.ChatCommands.Add(cmd);
             }
         }
+
+        public static void Refresh()
+        {
+            foreach(CommandBase cmd in List.Where(x=>x.Disabled==false))
+            {
+                TShockAPI.Commands.ChatCommands.RemoveAll(x => x.CommandDelegate == cmd.Execute);
+                TShockAPI.Commands.ChatCommands.Add(cmd);
+            }
+        }
+
         public static List<CommandBase> List { get; set; } = new()
         {
             new BalanceCommand(),
