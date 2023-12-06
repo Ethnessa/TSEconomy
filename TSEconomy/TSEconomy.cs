@@ -21,7 +21,7 @@ namespace TSEconomy
         /// <summary>
         /// A static reference to our database, really only intended to be used by TSEconomy internally.
         /// </summary>
-        internal static Database.Database DB { get; set; } = new();
+        internal static Database.Database s_DB { get; set; } = new();
 
         /// <summary>
         /// Directory at which our config, and lang files are stored in.
@@ -42,7 +42,7 @@ namespace TSEconomy
             Configuration.Configuration.Load();
 
             // init db
-            DB.InitializeDB(Config.UseMySQL);
+            s_DB.InitializeDB(Config.UseMySQL);
 
         }
 

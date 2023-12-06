@@ -24,9 +24,9 @@ namespace TSEconomy.Lang
     }
     internal static class Localization
     {
-        public static List<string> supportedLanguages = new List<string> { "Lang_en", "Lang_es", "Lang_ru" };
+        public static List<string> SupportedLanguages = new List<string> { "Lang_en", "Lang_es", "Lang_ru" };
 
-        private static Dictionary<string, string> LocalizedPluginTexts = new();
+        private static Dictionary<string, string> _localizedPluginTexts = new();
 
         public static void SetupLanguage()
         {
@@ -57,7 +57,7 @@ namespace TSEconomy.Lang
             {
                 List<KeyValue> list= (List<KeyValue>)serializer.Deserialize(xmlReader);
 
-                LocalizedPluginTexts = list.ToDictionary(i => i.Key, i => i.Value);
+                _localizedPluginTexts = list.ToDictionary(i => i.Key, i => i.Value);
             }
 
             TShock.Log.ConsoleInfo(TryGetString("Localization succesfully loaded from file {0}!", "Lang").SFormat(Path.Combine(localizationDirectory, fileName)));
@@ -66,7 +66,7 @@ namespace TSEconomy.Lang
 
         public static string TryGetString(string key, string tag = "")
         {
-            if(!LocalizedPluginTexts.TryGetValue(key, out string value))
+            if(!_localizedPluginTexts.TryGetValue(key, out string value))
                 value = key;
 
             if(tag == "")
@@ -81,14 +81,14 @@ namespace TSEconomy.Lang
 
         private static void getFileName(out string name)
         {
-            if (supportedLanguages.Any(i => i == TSEconomy.Config.Language))
+            if (SupportedLanguages.Any(i => i == TSEconomy.Config.Language))
                 name = TSEconomy.Config.Language + ".xml";
             
             else
             {
                 name = "Lang_en.xml";
 
-                TShock.Log.ConsoleError($"[TSEconomy Lang] Set value of the 'Language' property in configs is not valid, defaulting to 'en-CA'.\n here are the supported languages: {string.Join(", ", supportedLanguages)}");
+                TShock.Log.ConsoleError($"[TSEconomy Lang] Set value of the 'Language' property in configs is not valid, defaulting to 'en-CA'.\n here are the supported languages: {string.Join(", ", SupportedLanguages)}");
             }
         }
         /// <summary>
