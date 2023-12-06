@@ -1,6 +1,8 @@
 ﻿using PetaPoco;
 using Terraria;
 using TSEconomy.Configuration.Models;
+using TSEconomy.Database.Models.Properties;
+using TSEconomy.Lang;
 using TShockAPI;
 
 namespace TSEconomy.Database.Models
@@ -27,17 +29,20 @@ namespace TSEconomy.Database.Models
         private double _balance;
 
         [Column("Balance")]
-        public double Balance { get { return _balance; } set { } }
+
+        public double Balance { get { return _balance; } private set { } }
 
         public static BankAccount? TryCreateNewAccount(double initialbalance, string internalCurrencyName, int userID, BankAccountProperties flags = BankAccountProperties.Default,
-                                                    string transLog = "{0} has created a new bank account ({1}), with the initial value of {2}.")
+                                                       string transLog = "{0} has created a new bank account ({1}), with the initial value of {2}.")
         {
+            if(transLog == "{0} has created a new bank account ({1}), with the initial value of {2}.")
+                transLog = Localization.TryGetString("{0} has created a new bank account ({1}), with the initial value of {2}.");
 
             var curr = Currency.Get(internalCurrencyName);
 
             if (curr == null)
             {
-                TShock.Log.Error("[TSEconomy CreateNewAccount] Error: tried to create a new bank account with an invalid currency.");
+                TShock.Log.Error(Localization.TryGetString("Error: tried to create a new bank account with an invalid currency.", "CreateNewAccount"));
                 return null;
             }
 
@@ -55,7 +60,7 @@ namespace TSEconomy.Database.Models
 
             acc.SetBalance(initialbalance);
 
-            Api.DB.Insert(acc);
+            Api.InsertBankAccount(acc);
 
             if (acc.IsWorldAccount())
                 return acc;
@@ -68,8 +73,10 @@ namespace TSEconomy.Database.Models
         }
 
         // we have two variants as we might not want the logs to show -amount 
-        public bool TryAddBalance(double amount, string transLog = "{0}'s balance has been decreased by {1}. Old bal: {2} new bal: {3}")
+        public bool TryAddBalance(double amount, string transLog = "{0}'s balance has been increased by {1}. Old bal: {2} new bal: {3}")
         {
+            if(transLog == "{0}'s balance has been increased by {1}. Old bal: {2} new bal: {3}")
+                transLog = Localization.TryGetString("{0}'s balance has been increased by {1}. Old bal: {2} new bal: {3}");
 
             if (amount < 0)
                 return TryAddBalance(-amount, transLog);
@@ -89,6 +96,9 @@ namespace TSEconomy.Database.Models
 
         public bool TryRemoveBalance(double amount, string transLog = "{0}'s balance has been decreased by {1}. Old bal: {2} new bal: {3}")
         {
+            if(transLog == "{0}'s balance has been decreased by {1}. Old bal: {2} new bal: {3}")
+                transLog = Localization.TryGetString("{0}'s balance has been decreased by {1}. Old bal: {2} new bal: {3}");
+
             if (_balance < amount && !IsWorldAccount())
                 return false;
 
@@ -104,16 +114,15 @@ namespace TSEconomy.Database.Models
             return true;
         }
 
+        // UNDONE
         /// <summary>
         /// once implemented we'll want tryremovebalance and tryaddbalance to use it to with the world account. 
         /// </summary>
-        public void TryTransferTo(BankAccount receiver)
-        {
-            throw new NotImplementedException();
-        }
-
         public void SetBalance(double amount, string transLog = "{0}'s balance has been set to {1}. Old bal: {2}")
         {
+            if(transLog == "{0}'s balance has been set to {1}. Old bal: {2}")
+                transLog = Localization.TryGetString("{0}'s balance has been set to {1}. Old bal: {2}");
+
             double oldBalance = _balance;
 
             _balance = amount;

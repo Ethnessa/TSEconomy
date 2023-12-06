@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TSEconomy.Configuration.Models;
+﻿using TSEconomy.Configuration.Models;
+using TSEconomy.Lang;
 using TShockAPI;
 
 namespace TSEconomy.Commands
 {
-    public class BankAdminCommand : CommandBase
+    internal class BankAdminCommand : CommandBase
     {
-        public override string[] Aliases { get; set; } = { "bankadmin", "ecoadmin", "ba" };
         public override string[] PermissionNodes { get; set; } = { Permissions.Admin };
 
         public override void Execute(CommandArgs args)
@@ -22,13 +17,13 @@ namespace TSEconomy.Commands
 
             switch (subcmd)
             {
-                case "setbal":
+                case string s when s == Localization.TryGetString("setbal"):
                     {
                         var affectedUser = Helpers.GetUser(parameters.ElementAtOrDefault(0), out var affectedPlayer);
 
                         if (affectedUser == null)
                         {
-                            player.SendErrorMessage("That player does not exist!");
+                            player.SendErrorMessage(Localization.TryGetString("[i:855]That player does not exist!", "SetBalance"));
                             return;
                         }
 
@@ -36,21 +31,21 @@ namespace TSEconomy.Commands
 
                         if (currencyInput == default)
                         {
-                            player.SendErrorMessage("Please enter a currency name!");
+                            player.SendErrorMessage(Localization.TryGetString("[i:855]Please enter a currency name!", "SetBalance"));
                             return;
                         }
 
                         Currency? currency = Currency.Get(currencyInput);
                         if (currency == null)
                         {
-                            player.SendErrorMessage("That currency does not exist!");
+                            player.SendErrorMessage(Localization.TryGetString("[i:855]That currency does not exist!", "SetBalance"));
                             return;
                         }
 
                         var amountInput = parameters.ElementAtOrDefault(2);
                         if (amountInput == default)
                         {
-                            player.SendErrorMessage("Please enter an amount to set!");
+                            player.SendErrorMessage(Localization.TryGetString("[i:855]Please enter an amount to set!", "SetBalance"));
                             return;
                         }
 
@@ -58,27 +53,27 @@ namespace TSEconomy.Commands
                         if (couldParse && amnt > 0)
                         {
                             var bankAccount = Api.GetBankAccount(affectedUser.ID, currency);
-                            bankAccount.SetBalance(amnt, "The admin {0} set the user {{0}}'s balance from {{1}} to {{2}}.".SFormat(player.Name));
+                            bankAccount.SetBalance(amnt, Localization.TryGetString("The admin {0} set the user {{0}}'s balance from {{1}} to {{2}}.").SFormat(player.Name));
 
                             if (affectedPlayer != null)
                             {
-                                affectedPlayer.SendInfoMessage($"Your balance for {currency.DisplayName} was set to {amnt} by {player.Name}");
+                                affectedPlayer.SendInfoMessage(Localization.TryGetString("[i:855]Your balance for {0} was set to {1} by {2}", "plugin").SFormat(currency.DisplayName, currency.GetName(amnt), player.Name));
                             }
                             return;
                         }
                         else
                         {
-                            player.SendErrorMessage("The amount you entered was invalid!");
+                            player.SendErrorMessage(Localization.TryGetString("[i:855]The amount you entered was invalid!", "SetBalance"));
                             return;
                         }
                     }
-                case "resetbal":
+                case string s when s == Localization.TryGetString("resetbal"):
                     {
                         var affectedUser = Helpers.GetUser(parameters.ElementAtOrDefault(0), out var affectedPlayer);
 
                         if (affectedUser == null)
                         {
-                            player.SendErrorMessage("That player does not exist!");
+                            player.SendErrorMessage(Localization.TryGetString("[i:855]That player does not exist!", "ResetBalance"));
                             return;
                         }
 
@@ -86,32 +81,32 @@ namespace TSEconomy.Commands
 
                         if (currencyInput == default)
                         {
-                            player.SendErrorMessage("Please enter a currency name!");
+                            player.SendErrorMessage(Localization.TryGetString("[i:855]Please enter a currency name!", "ResetBalance"));
                             return;
                         }
 
                         Currency? currency = Currency.Get(currencyInput);
                         if (currency == null)
                         {
-                            player.SendErrorMessage("That currency does not exist!");
+                            player.SendErrorMessage(Localization.TryGetString("[i:855]That's not a valid currency!", "ResetBalance"));
                             return;
                         }
 
                         var bankAccount = Api.GetBankAccount(affectedUser.ID, currency);
-                        bankAccount.SetBalance(0, "The admin {0} reset the user {{0}}'s balance from {bankAccount.Balance} to {{1}}. Old Balance: {{2}}".SFormat(player.Name));
+                        bankAccount.SetBalance(0, Localization.TryGetString("The admin {0} reset the user {{0}}'s balance from {{2}} to {{1}}.").SFormat(player.Name));
                         if (affectedPlayer != null)
                         {
-                            affectedPlayer.SendInfoMessage($"Your balance for {currency.DisplayName} was reset to 0 by {player.Name}");
+                            affectedPlayer.SendInfoMessage(Localization.TryGetString("[i:855]Your balance for {0} was reset to 0 by {1}", "plugin").SFormat(currency.DisplayName, player.Name));
                         }
                         return;
                     }
-                case "checkbal":
+                case string s when s == Localization.TryGetString("checkbal"):
                     {
                         var affectedUser = Helpers.GetUser(parameters.ElementAtOrDefault(0), out var affectedPlayer);
 
                         if (affectedUser == null)
                         {
-                            player.SendErrorMessage("That player does not exist!");
+                            player.SendErrorMessage(Localization.TryGetString("[i:855]That player does not exist!", "CheckBalance"));
                             return;
                         }
 
@@ -119,19 +114,19 @@ namespace TSEconomy.Commands
 
                         if (currencyInput == default)
                         {
-                            player.SendErrorMessage("Please enter a currency name!");
+                            player.SendErrorMessage(Localization.TryGetString("[i:855]Please enter a currency name!", "CheckBalance"));
                             return;
                         }
 
                         Currency? currency = Currency.Get(currencyInput);
                         if (currency == null)
                         {
-                            player.SendErrorMessage("That currency does not exist!");
+                            player.SendErrorMessage(Localization.TryGetString("[i:855]That's not a valid currency!", "CheckBalance"));
                             return;
                         }
 
                         var bankAccount = Api.GetBankAccount(affectedUser.ID, currency);
-                        player.SendInfoMessage($"The user {affectedUser.Name}'s balance for {currency.DisplayName} is {bankAccount.Balance}.");
+                        player.SendInfoMessage(Localization.TryGetString("[i:855]The user {0}'s balance for {1} is {2}.", "CheckBalance").SFormat(affectedUser.Name, currency.DisplayName, currency.GetName(bankAccount.Balance)));
                         return;
                     }
             }

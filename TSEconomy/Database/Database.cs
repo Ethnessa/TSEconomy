@@ -1,6 +1,7 @@
 ﻿using PetaPoco;
 using PetaPoco.Providers;
 using TSEconomy.Database.Models;
+using TSEconomy.Lang;
 using TShockAPI;
 
 namespace TSEconomy.Database
@@ -30,18 +31,18 @@ namespace TSEconomy.Database
 
                     EnsureTableStructure(DBType.MySQL);
 
-                    TShock.Log.Info($"TSEconomy database connected! (MySQL)");
+                    TShock.Log.Info(Localization.TryGetString("TSEconomy database connected! (MySQL)", "InitializeDB"));
                 }
                 catch (Exception ex)
                 {
-                    TShock.Log.Info($"TSEconomy experienced a database error! (MySQL)");
+                    TShock.Log.Info(Localization.TryGetString("TSEconomy experienced a database error! (MySQL)", "InitializeDB"));
                     TShock.Log.Info(ex.Message);
                 }
 
             }
             else // using sqlite
             {
-                var connString = customSQLitePath == "" ? $"Data Source=tshock/TSEconomy.sqlite;" : $"Data Source={customSQLitePath};";
+                var connString = customSQLitePath == "" ? $"Data Source={TSEconomy.PluginDirectory}/TSEconomy.sqlite;" : $"Data Source={customSQLitePath};";
                 DB = DatabaseConfiguration.Build()
                     .UsingConnectionString(connString)
                     .UsingProvider<SQLiteDatabaseProvider>()
@@ -52,11 +53,11 @@ namespace TSEconomy.Database
                 try
                 {
                     EnsureTableStructure(DBType.SQLite);
-                    TShock.Log.Info($"TSEconomy database connected! (SQLite)");
+                    TShock.Log.Info(Localization.TryGetString("TSEconomy database connected! (SQLite)", "InitializeDB"));
                 }
                 catch (Exception ex)
                 {
-                    TShock.Log.Info($"TSEconomy experienced a database error! (SQLite)");
+                    TShock.Log.Info(Localization.TryGetString("TSEconomy experienced a database error! (SQLite)", "InitializeDB"));
                     TShock.Log.Info(ex.Message);
                 }
 
