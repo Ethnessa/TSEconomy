@@ -42,13 +42,13 @@ namespace TSEconomy.Database
         private static string GetColumnType(Type type, DBType dbProvider)
         {
             // Simplified mapping, needs to be expanded based on actual requirements
-            if (type == typeof(int) || type == typeof(BankAccountProperties) 
+            if (type == typeof(int) || type == typeof(BankAccountProperties)
                 || type == typeof(TransactionProperties)) return "INTEGER";
             if (type == typeof(double)) return "REAL";
-            if (type == typeof(string)) return (dbProvider == DBType.SQLite ? "TEXT" : "VARCHAR(255)");
+            if (type == typeof(string)) return dbProvider == DBType.SQLite ? "TEXT" : "VARCHAR(255)";
             if (type == typeof(DateTime)) return "DATETIME";
             if (type == typeof(byte[])) return "BLOB";
-            if (type == typeof(bool)) return (dbProvider == DBType.MySQL ? "BOOLEAN" : "INTEGER");
+            if (type == typeof(bool)) return dbProvider == DBType.MySQL ? "BOOLEAN" : "INTEGER";
 
             throw new NotSupportedException($"Type {type} not supported.");
         }

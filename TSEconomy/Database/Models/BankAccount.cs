@@ -35,7 +35,7 @@ namespace TSEconomy.Database.Models
         public static BankAccount? TryCreateNewAccount(double initialbalance, string internalCurrencyName, int userID, BankAccountProperties flags = BankAccountProperties.Default,
                                                        string transLog = "{0} has created a new bank account ({1}), with the initial value of {2}.")
         {
-            if(transLog == "{0} has created a new bank account ({1}), with the initial value of {2}.")
+            if (transLog == "{0} has created a new bank account ({1}), with the initial value of {2}.")
                 transLog = Localization.TryGetString("{0} has created a new bank account ({1}), with the initial value of {2}.");
 
             var curr = Currency.Get(internalCurrencyName);
@@ -75,7 +75,7 @@ namespace TSEconomy.Database.Models
         // we have two variants as we might not want the logs to show -amount 
         public bool TryAddBalance(double amount, string transLog = "{0}'s balance has been increased by {1}. Old bal: {2} new bal: {3}")
         {
-            if(transLog == "{0}'s balance has been increased by {1}. Old bal: {2} new bal: {3}")
+            if (transLog == "{0}'s balance has been increased by {1}. Old bal: {2} new bal: {3}")
                 transLog = Localization.TryGetString("{0}'s balance has been increased by {1}. Old bal: {2} new bal: {3}");
 
             if (amount < 0)
@@ -96,7 +96,7 @@ namespace TSEconomy.Database.Models
 
         public bool TryRemoveBalance(double amount, string transLog = "{0}'s balance has been decreased by {1}. Old bal: {2} new bal: {3}")
         {
-            if(transLog == "{0}'s balance has been decreased by {1}. Old bal: {2} new bal: {3}")
+            if (transLog == "{0}'s balance has been decreased by {1}. Old bal: {2} new bal: {3}")
                 transLog = Localization.TryGetString("{0}'s balance has been decreased by {1}. Old bal: {2} new bal: {3}");
 
             if (_balance < amount && !IsWorldAccount())
@@ -120,7 +120,7 @@ namespace TSEconomy.Database.Models
         /// </summary>
         public void SetBalance(double amount, string transLog = "{0}'s balance has been set to {1}. Old bal: {2}")
         {
-            if(transLog == "{0}'s balance has been set to {1}. Old bal: {2}")
+            if (transLog == "{0}'s balance has been set to {1}. Old bal: {2}")
                 transLog = Localization.TryGetString("{0}'s balance has been set to {1}. Old bal: {2}");
 
             double oldBalance = _balance;

@@ -21,9 +21,9 @@ namespace TSEconomy
         /// Private reference to our database, can only be accessed from Api class members
         /// </summary>
         private static IDatabase DB => TSEconomy.DB.DB;
-        
+
         // ? why are we splitting these?
-        private static List<Currency> currencies = new List<Currency>();
+        private static List<Currency> currencies = new();
         public static List<Currency> Currencies
         {
             get
@@ -38,7 +38,7 @@ namespace TSEconomy
             InternalName = "sys",
             Symbol = "^"
         };
-        
+
         public static List<BankAccount> BankAccounts
         {
             get

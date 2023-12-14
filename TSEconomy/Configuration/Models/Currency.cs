@@ -17,7 +17,7 @@
         public bool IsSystemCurrency()
         {
             // uses a not frequenly used symbol, quite a goofy ahh implementation, we could switch to IDs and add a constructor for Currencies
-            return (DisplayName == "System-Cash" || InternalName == "sys" || Symbol == "^");
+            return DisplayName == "System-Cash" || InternalName == "sys" || Symbol == "^";
         }
 
         public static Currency? GetFirst()
@@ -28,8 +28,8 @@
         public string GetName(double amount, bool showSymbol = true, bool showName = false, int DecimalsKept = 2)
         {
             string name;
-            string symbol = (showSymbol ? Symbol : "");
-            
+            string symbol = showSymbol ? Symbol : "";
+
             if (amount <= 1)
                 name = PrefixSymbol ? $"{symbol} {Math.Round(amount, DecimalsKept)} {(showName ? DisplayName : "")}" : $"{(showName ? DisplayName : "")} {Math.Round(amount, DecimalsKept)} {symbol}";
 

@@ -42,13 +42,13 @@ namespace TSEconomy
         // ?? is this necessary when TShock.UserAccounts.GetUserAccountByID exists
         public static string? GetAccountName(int UserID)
         {
-            if(UserID == -1) 
+            if (UserID == -1)
             {
                 return TSPlayer.Server.Name;
             }
 
             var user = TShock.UserAccounts.GetUserAccountByID(UserID);
-            if(user == null)
+            if (user == null)
             {
                 return null;
             }
