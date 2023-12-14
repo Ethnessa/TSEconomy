@@ -22,7 +22,7 @@ namespace TSEconomy.Lang
             Value = value;
         }
     }
-    internal static class Localization
+    public static class Localization
     {
         public static List<string> SupportedLanguages = new() { "Lang_en", "Lang_es", "Lang_ru" };
 
