@@ -48,6 +48,7 @@ namespace TSEconomy
 
         public static void OnInitialize(EventArgs args)
         {
+            // initialize localization files
             Localization.SetupLanguage();
 
             // register commands

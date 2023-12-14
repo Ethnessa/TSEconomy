@@ -124,9 +124,9 @@ namespace TSEconomy
                 var receiverName = Helpers.GetAccountName(receiver.UserID);
                 var payeeName = Helpers.GetAccountName(payee.UserID);
 
-                payee.TryRemoveBalance(amount, Localization.TryGetString("{{0}} has transfered {{1}} to {0}. Old bal: {{2}} new bal {{3}}").SFormat(receiverName));
+                payee.TryModifyBalance(amount, BalanceOperation.Subtract, Localization.TryGetString("{{0}} has transfered {{1}} to {0}. Old bal: {{2}} new bal {{3}}").SFormat(receiverName));
 
-                receiver.TryAddBalance(amount, Localization.TryGetString("{{0}} has received {{1}} from {0}. Old bal: {{2}} new bal {{3}}").SFormat(payeeName));
+                receiver.TryModifyBalance(amount, BalanceOperation.Add, Localization.TryGetString("{{0}} has received {{1}} from {0}. Old bal: {{2}} new bal {{3}}").SFormat(payeeName));
 
                 return true;
             }

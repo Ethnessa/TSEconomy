@@ -38,19 +38,28 @@ namespace TSEconomy.Database
 
             return sb.ToString();
         }
-
         private static string GetColumnType(Type type, DBType dbProvider)
         {
-            // Simplified mapping, needs to be expanded based on actual requirements
-            if (type == typeof(int) || type == typeof(BankAccountProperties)
-                || type == typeof(TransactionProperties)) return "INTEGER";
-            if (type == typeof(double)) return "REAL";
-            if (type == typeof(string)) return dbProvider == DBType.SQLite ? "TEXT" : "VARCHAR(255)";
-            if (type == typeof(DateTime)) return "DATETIME";
-            if (type == typeof(byte[])) return "BLOB";
-            if (type == typeof(bool)) return dbProvider == DBType.MySQL ? "BOOLEAN" : "INTEGER";
+            var supportedTypeMappings = new Dictionary<Type, string>
+            {
+                { typeof(int), "INTEGER" },
+                { typeof(BankAccountProperties), "INTEGER" },
+                { typeof(TransactionProperties), "INTEGER" },
+                { typeof(double), "REAL" },
+                { typeof(string), dbProvider == DBType.SQLite ? "TEXT" : "VARCHAR(255)" },
+                { typeof(DateTime), "DATETIME" },
+                { typeof(byte[]), "BLOB" },
+                { typeof(bool), dbProvider == DBType.MySQL ? "BOOLEAN" : "INTEGER" }
+            };
+
+            if (supportedTypeMappings.TryGetValue(type, out var columnType))
+            {
+                return columnType;
+            }
 
             throw new NotSupportedException($"Type {type} not supported.");
         }
+
+
     }
 }

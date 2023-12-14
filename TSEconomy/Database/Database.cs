@@ -35,8 +35,8 @@ namespace TSEconomy.Database
                 }
                 catch (Exception ex)
                 {
-                    TShock.Log.Info(Localization.TryGetString("TSEconomy experienced a database error! (MySQL)", "InitializeDB"));
-                    TShock.Log.Info(ex.Message);
+                    TShock.Log.ConsoleError(Localization.TryGetString("TSEconomy experienced a database error! (MySQL)", "InitializeDB"));
+                    TShock.Log.ConsoleError(ex.Message);
                 }
 
             }
@@ -57,8 +57,8 @@ namespace TSEconomy.Database
                 }
                 catch (Exception ex)
                 {
-                    TShock.Log.Info(Localization.TryGetString("TSEconomy experienced a database error! (SQLite)", "InitializeDB"));
-                    TShock.Log.Info(ex.Message);
+                    TShock.Log.ConsoleError(Localization.TryGetString("TSEconomy experienced a database error! (SQLite)", "InitializeDB"));
+                    TShock.Log.ConsoleError(ex.Message);
                 }
 
             }
