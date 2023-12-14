@@ -8,6 +8,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Lang\Lang_en.xml" />
+    <None Remove="Lang\Lang_es.xml" />
+    <None Remove="Lang\Lang_ru.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Lang\Lang_en.xml" />
+    <EmbeddedResource Include="Lang\Lang_es.xml" />
+    <EmbeddedResource Include="Lang\Lang_ru.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="PetaPoco.Compiled" Version="6.0.671-beta" />
     <PackageReference Include="TShock" Version="5.2.0" />
   </ItemGroup>

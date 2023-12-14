@@ -1,13 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
 using TSEconomy.Configuration.Models;
-using TSEconomy.Extentions;
+using TSEconomy.Extensions;
+using TSEconomy.Lang;
 using TShockAPI;
 
 namespace TSEconomy.Commands
 {
-    public class BalanceCommand : CommandBase
+    internal class BalanceCommand : CommandBase
     {
-        public override string[] Aliases { get; set; } = { "balance", "bal", "money" };
         public override string[] PermissionNodes { get; set; } = { Permissions.User, Permissions.Balance };
 
         public override void Execute(CommandArgs args)
@@ -20,12 +20,12 @@ namespace TSEconomy.Commands
 
             if (currency == null)
             {
-                player.SendErrorMessage("That's not a valid currency!");
+                player.SendErrorMessage(Localization.TryGetString("[i:855]That's not a valid currency!", "Balance"));
                 return;
             }
 
             var bankAccount = player.GetBankAccount(currency);
-            player.SendMessage($"You have {currency.Symbol}{bankAccount.Balance} {currency.DisplayName.ToLower()}{(bankAccount.Balance == 1 ? "" : "s")}", Color.LightGreen);
+            player.SendMessage(Localization.TryGetString("[i:855]You have {0}!", "Balance").SFormat(currency.GetName(bankAccount.Balance, showName: true)), Color.LightGreen);
         }
     }
 }

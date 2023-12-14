@@ -1,11 +1,12 @@
 ﻿using TSEconomy.Database.Models;
+using TSEconomy.Database.Models.Properties;
 
 namespace TSEconomy.Logging
 {
     public class TransactionLogging
     {
         public static DateTime? SessionLog { get; set; }
-        public static string safeLogSession
+        public static string SafeLogSession
         {
             get
             {
@@ -13,13 +14,13 @@ namespace TSEconomy.Logging
                 return formattedSessionLog.Replace(':', '-').Replace(' ', '_');
             }
         }
-        public static string logPath => TSEconomy.Config.TransactionLogPath;
+        public static string LogPath => TSEconomy.Config.TransactionLogPath;
 
         public static void Log(Transaction trans)
         {
-            if (!Directory.Exists(logPath))
+            if (!Directory.Exists(LogPath))
             {
-                Directory.CreateDirectory(logPath);
+                Directory.CreateDirectory(LogPath);
             }
 
             if (SessionLog == null)
@@ -27,18 +28,17 @@ namespace TSEconomy.Logging
                 SessionLog = DateTime.Now;
             }
 
-            var sessionLogFile = Path.Combine(logPath, $"{safeLogSession}.txt");
+            var sessionLogFile = Path.Combine(LogPath, $"{SafeLogSession}.txt");
             if (!File.Exists(sessionLogFile))
             {
                 File.Create(sessionLogFile).Close(); // Close the file stream after creating it.
             }
 
-            using (StreamWriter writer = File.AppendText(sessionLogFile))
-            {
-                string flag = trans.Flags == TransactionProperties.Set ? "Set" : "Add";
+            using StreamWriter writer = File.AppendText(sessionLogFile);
 
-                writer.WriteLine($"[{trans.Timestamp}] [{flag}] [Cur:{trans.InternalCurrencyName}] [ID:{trans.UserID}]: {trans.TransactionDetails}");
-            }
+            string flag = trans.Flags == TransactionProperties.Set ? "Set" : "Add";
+
+            writer.WriteLine($"[{trans.Timestamp}] [{flag}] [Cur:{trans.InternalCurrencyName}] [ID:{trans.UserID}]: {trans.TransactionDetails}");
         }
 
 
