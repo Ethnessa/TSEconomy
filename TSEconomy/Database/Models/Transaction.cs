@@ -3,6 +3,9 @@ using TSEconomy.Database.Models.Properties;
 
 namespace TSEconomy.Database.Models
 {
+    /// <summary>
+    /// Represents a transaction in the database.
+    /// </summary>
     [TableName("Transactions")]
     [PrimaryKey("ID")]
     public class Transaction
@@ -27,25 +30,25 @@ namespace TSEconomy.Database.Models
 
         [Column("Flags")]
         public TransactionProperties Flags { get; set; }
-
-        public Transaction(int UserID, string internalCurrencyName, double amountChanged, string transDetails, DateTime timeStamp, TransactionProperties flags)
+        
+        public Transaction(int userId, string internalCurrencyName, double amountChanged, string transDetails, DateTime timeStamp, TransactionProperties flags)
         {
-            this.UserID = UserID;
-            this.InternalCurrencyName = internalCurrencyName;
-            this.Amount = amountChanged;
-            this.TransactionDetails = transDetails;
-            this.Timestamp = timeStamp;
-            this.Flags = flags;
+            UserID = userId;
+            InternalCurrencyName = internalCurrencyName;
+            Amount = amountChanged;
+            TransactionDetails = transDetails;
+            Timestamp = timeStamp;
+            Flags = flags;
         }
 
-        public Transaction(int UserID, string internalCurrencyName, double amountChanged, string transDetails, TransactionProperties flags)
+        public Transaction(int userId, string internalCurrencyName, double amountChanged, string transDetails, TransactionProperties flags)
         {
-            this.UserID = UserID;
-            this.InternalCurrencyName = internalCurrencyName;
-            this.Amount = amountChanged;
-            this.TransactionDetails = transDetails;
-            this.Timestamp = DateTime.UtcNow;
-            this.Flags = flags;
+            UserID = userId;
+            InternalCurrencyName = internalCurrencyName;
+            Amount = amountChanged;
+            TransactionDetails = transDetails;
+            Timestamp = DateTime.UtcNow;
+            Flags = flags;
         }
     }
 }

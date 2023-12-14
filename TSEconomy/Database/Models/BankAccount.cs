@@ -7,6 +7,9 @@ using TShockAPI;
 
 namespace TSEconomy.Database.Models
 {
+    /// <summary>
+    /// Represents a user's bank account, tied to a currency in database
+    /// </summary>
     [TableName("BankAccounts")]
     [PrimaryKey("ID")]
     public class BankAccount
@@ -32,6 +35,15 @@ namespace TSEconomy.Database.Models
 
         public double Balance { get { return _balance; } private set { } }
 
+        /// <summary>
+        /// Attempts to create a new bank account for the specified user, with the specified currency.
+        /// </summary>
+        /// <param name="initialbalance">Starting balance for bank account</param>
+        /// <param name="internalCurrencyName">The internal currency ID</param>
+        /// <param name="userID">TShock UserAccount's ID</param>
+        /// <param name="flags">BankAccount properties</param>
+        /// <param name="transLog">Transaction message for logging</param>
+        /// <returns></returns>
         public static BankAccount? TryCreateNewAccount(double initialbalance, string internalCurrencyName, int userID, BankAccountProperties flags = BankAccountProperties.Default,
                                                        string transLog = "{0} has created a new bank account ({1}), with the initial value of {2}.")
         {
@@ -72,47 +84,55 @@ namespace TSEconomy.Database.Models
 
         }
 
-        // we have two variants as we might not want the logs to show -amount 
-        public bool TryAddBalance(double amount, string transLog = "{0}'s balance has been increased by {1}. Old bal: {2} new bal: {3}")
+        /// <summary>
+        /// Attempts to modify the balance of the bank account.
+        /// </summary>
+        /// <param name="amount">The amount to increment/reduce by</param>
+        /// <param name="operationType">Whether the option is an adding or subtraction operation</param>
+        /// <param name="transLog">Overrides default transaction log message</param>
+        /// <returns>Whether the transaction can be completed</returns>
+        public bool TryModifyBalance(double amount, BalanceOperation operationType, string transLog = null)
         {
-            if (transLog == "{0}'s balance has been increased by {1}. Old bal: {2} new bal: {3}")
-                transLog = Localization.TryGetString("{0}'s balance has been increased by {1}. Old bal: {2} new bal: {3}");
+            if (operationType == BalanceOperation.Add)
+            {
+                transLog ??= Localization.TryGetString("{0}'s balance has been increased by {1}. Old bal: {2} new bal: {3}");
 
-            if (amount < 0)
-                return TryAddBalance(-amount, transLog);
+                if (amount < 0)
+                    return false;
 
-            _balance += amount;
+                _balance += amount;
+            }
+            else if(operationType == BalanceOperation.Subtract)
+            {
+                transLog ??= Localization.TryGetString("{0}'s balance has been decreased by {1}. Old bal: {2} new bal: {3}");
 
-            Api.UpdateBankAccount(this);
+                if (_balance < amount && !IsWorldAccount())
+                    return false;
 
-            if (IsWorldAccount())
-                return true;
-
-            Api.AddTransaction(UserID, InternalCurrencyName, amount, transLog.SFormat(Helpers.GetAccountName(UserID), amount, Balance - amount, Balance),
-                               TransactionProperties.Add);
-
-            return true;
-        }
-
-        public bool TryRemoveBalance(double amount, string transLog = "{0}'s balance has been decreased by {1}. Old bal: {2} new bal: {3}")
-        {
-            if (transLog == "{0}'s balance has been decreased by {1}. Old bal: {2} new bal: {3}")
-                transLog = Localization.TryGetString("{0}'s balance has been decreased by {1}. Old bal: {2} new bal: {3}");
-
-            if (_balance < amount && !IsWorldAccount())
+                _balance -= amount;
+            }
+            else
+            {
                 return false;
+            }
 
-            _balance -= amount;
             Api.UpdateBankAccount(this);
 
-            if (IsWorldAccount())
-                return true;
-
-            Api.AddTransaction(UserID, InternalCurrencyName, amount, transLog.SFormat(Helpers.GetAccountName(UserID), amount, Balance + amount, Balance),
-                               TransactionProperties.Add);
+            if (!IsWorldAccount())
+            {
+                if (operationType == BalanceOperation.Add)
+                {
+                    Api.AddTransaction(UserID, InternalCurrencyName, amount, transLog.SFormat(Helpers.GetAccountName(UserID), amount, Balance - amount, Balance), TransactionProperties.Add);
+                }
+                else
+                {
+                    Api.AddTransaction(UserID, InternalCurrencyName, amount, transLog.SFormat(Helpers.GetAccountName(UserID), amount, Balance + amount, Balance), TransactionProperties.Add);
+                }
+            }
 
             return true;
         }
+
 
         // UNDONE
         /// <summary>
