@@ -36,7 +36,7 @@ namespace TSEconomy.Commands
             }
 
             var curr = param.ElementAtOrDefault(1);
-            Currency? currency = curr == default ? Currency.GetFirst() : Currency.Get(curr);
+            Currency? currency = curr == default ? Currency.GetDefault() : Currency.Get(curr);
 
             if (currency == null)
             {

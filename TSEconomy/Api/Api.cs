@@ -22,23 +22,58 @@ namespace TSEconomy
         /// </summary>
         private static IDatabase DB => TSEconomy.DB.DB;
         
-        // ? why are we splitting these?
-        private static List<Currency> currencies = new List<Currency>();
-        public static List<Currency> Currencies
-        {
-            get
+        /// <summary>
+        /// Represents a list of valid currencies
+        /// </summary>
+        internal static List<Currency> Currencies { get; set; } = new();
+
+        public static Currency SystemCurrency { 
+            get 
             {
-                return currencies.Concat(Config.Currencies).ToList();
-            }
+                return Currencies.FirstOrDefault();
+            } 
+        }
+        
+        /// <summary>
+        /// Returns a copy of TSEconomy's currency list
+        /// </summary>
+        public static List<Currency> GetCurrencies()
+        {
+            Currency[] arr = new Currency[Currencies.Count];
+
+            Currencies.CopyTo(arr);
+
+            return arr.ToList();
         }
 
-        public static Currency SystemCurrency { get; } = new Currency()
+        public static bool AddCurrency(Currency currency)
         {
-            DisplayName = "System-Cash",
-            InternalName = "sys",
-            Symbol = "^"
-        };
-        
+            if (Currencies.Any(i => i.InternalName == currency.InternalName))
+                return false;
+
+            Currencies.Add(currency);
+            return true;
+        }
+
+        public static bool RemoveCurrency(Currency currency)
+        {
+            if (currency.IsSystemCurrency() || !Currencies.Contains(currency))
+                return false;
+
+            Currencies.Remove(currency);
+            return true;
+        }
+
+        public static void AddCurrency(string displayName, string internalName, string symbol, string pluralDisplayName, bool prefixSymbol)
+        {
+            Currencies.Add(new(displayName, internalName, symbol, pluralDisplayName, prefixSymbol));
+        }
+
+        public static bool IsCurrencyValid(Currency curr)
+        {
+            return Currencies.Contains(curr);
+        }
+
         public static List<BankAccount> BankAccounts
         {
             get
@@ -91,11 +126,6 @@ namespace TSEconomy
                 return BankAccount.TryCreateNewAccount(0, curr.InternalName, userId);
             }
             return bankAccount;
-        }
-
-        public static List<Currency> GetCurrencies()
-        {
-            return TSEconomy.Config.Currencies.ToList();
         }
 
         public static void UpdateBankAccount(BankAccount account)

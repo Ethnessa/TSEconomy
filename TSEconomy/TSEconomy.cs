@@ -1,5 +1,6 @@
 ﻿using Terraria;
 using TerrariaApi.Server;
+using TSEconomy.Configuration.Models;
 using TSEconomy.Lang;
 using TShockAPI;
 
@@ -61,6 +62,18 @@ namespace TSEconomy
                 x.Player.SendSuccessMessage(Localization.TryGetString("[i:855]Reloaded config.", "plugin"));
             };
 
+            // Load currencies
+
+            // The system currency should always be first
+            Currency sysCurrency = new("System-Cash", "sys", "*", "System-Cash", false);
+
+            Api.Currencies.Add(sysCurrency);
+
+            Api.Currencies.AddRange(Config.Currencies);
+
+
         }
+
+
     }
 }

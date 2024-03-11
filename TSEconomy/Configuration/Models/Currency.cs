@@ -10,19 +10,27 @@
 
         public string PluralDisplayName { get; set; } = "Dollars";
 
+        public Currency(string displayName,  string internalName, string symbol, string pluralDisplayName, bool prefixSymbol)
+        {
+            DisplayName = displayName;
+            InternalName = internalName;
+            Symbol = symbol;
+            PluralDisplayName = pluralDisplayName;
+            PrefixSymbol = prefixSymbol;
+        }
+        public Currency() { }
         public static Currency? Get(string name)
         {
             return Api.Currencies.FirstOrDefault(x => x.InternalName == name || x.DisplayName == name || x.Symbol == name);
         }
         public bool IsSystemCurrency()
         {
-            // uses a not frequenly used symbol, quite a goofy ahh implementation, we could switch to IDs and add a constructor for Currencies
-            return (DisplayName == "System-Cash" || InternalName == "sys" || Symbol == "^");
+            return this == Api.SystemCurrency;
         }
 
-        public static Currency? GetFirst()
+        public static Currency? GetDefault()
         {
-            return Api.Currencies.ElementAtOrDefault(0);
+            return Api.Currencies.ElementAtOrDefault(1);
         }
 
         public string GetName(double amount, bool showSymbol = true, bool showName = false, int DecimalsKept = 2)

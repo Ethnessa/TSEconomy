@@ -1,4 +1,7 @@
-﻿using PetaPoco;
+﻿using Newtonsoft.Json;
+using NuGet.Protocol;
+using Org.BouncyCastle.Crypto.Generators;
+using PetaPoco;
 using Terraria;
 using TSEconomy.Configuration.Models;
 using TSEconomy.Database.Models.Properties;
@@ -17,8 +20,8 @@ namespace TSEconomy.Database.Models
         [Column("UserID")]
         public int UserID { get; set; }
 
-        [Column("Currency")]
-        public string InternalCurrencyName { get; set; }
+        // [Column("Currency")]
+        // public string InternalCurrencyName { get; set; }
 
         [Column("WorldID")]
         public int WorldID { get; set; }
@@ -26,46 +29,85 @@ namespace TSEconomy.Database.Models
         [Column("Flags")]
         public BankAccountProperties Flags { get; set; }
 
-        private double _balance;
-
         [Column("Balance")]
+        public string JsonBalance { get; private set; } = new Dictionary<string, double>().ToJson();
 
-        public double Balance { get { return _balance; } private set { } }
-
-        public static BankAccount? TryCreateNewAccount(double initialbalance, string internalCurrencyName, int userID, BankAccountProperties flags = BankAccountProperties.Default,
-                                                       string transLog = "{0} has created a new bank account ({1}), with the initial value of {2}.")
-        {
-            if(transLog == "{0} has created a new bank account ({1}), with the initial value of {2}.")
-                transLog = Localization.TryGetString("{0} has created a new bank account ({1}), with the initial value of {2}.");
-
-            var curr = Currency.Get(internalCurrencyName);
-
-            if (curr == null)
+        /// <summary>
+        /// a deserialized copy of JsonBalance.
+        /// </summary>
+    
+        public Dictionary<string, double> Balance {
+            get 
             {
-                TShock.Log.Error(Localization.TryGetString("Error: tried to create a new bank account with an invalid currency.", "CreateNewAccount"));
+                return (Dictionary<string, double>)JsonConvert.DeserializeObject(JsonBalance, typeof(Dictionary<string, double>));
+            }
+            private set { } 
+        }  
+        public double? GetBalance(Currency curr)
+        {
+            if (!Api.IsCurrencyValid(curr))
+            {
+                TShock.Log.ConsoleError(Localization.TryGetString("Error: tried to get an account's balance for a currency that does not exist.", "GetBalance"));
                 return null;
             }
 
-            if (Api.HasBankAccount(userID, curr))
+            if (!Balance.ContainsKey(curr.InternalName))
+                AddCurrency(curr);
+
+            return Balance[curr.InternalName];
+
+        }
+
+        public bool AddCurrency(Currency curr)
+        {
+            if (!Api.IsCurrencyValid(curr) || Balance.ContainsKey(curr.InternalName))
+                return false;
+
+            var newDict = Balance;
+            newDict.Add(curr.InternalName, 0f);
+
+            JsonBalance = newDict.ToJson();
+
+            return true;
+        }
+
+        public static BankAccount? TryCreateNewAccount(Currency startingCurrency, double initializedCurrencyValue, int userID, BankAccountProperties flags = BankAccountProperties.Default,
+                                                       string transLog = "{0} has created a new bank")
+        {
+            if(transLog == "{0} has created a new bank account.")
+                transLog = Localization.TryGetString("{0} has created a new bank account.");
+
+            if (!Api.IsCurrencyValid(startingCurrency))
+            {
+                // error
+                return null;
+            }
+
+            if(initializedCurrencyValue < 0)
+            {
+                // error
+                return null;
+            }
+
+            if (Api.HasBankAccount(userID))
                 return Api.GetBankAccount(userID, curr);
 
 
             var acc = new BankAccount()
             {
                 Flags = flags,
-                InternalCurrencyName = internalCurrencyName,
                 UserID = userID,
                 WorldID = Main.worldID
             };
 
-            acc.SetBalance(initialbalance);
+            acc.SetBalance(initializedCurrencyValue, startingCurrency);
 
             Api.InsertBankAccount(acc);
 
             if (acc.IsWorldAccount())
                 return acc;
 
-            Api.AddTransaction(userID, internalCurrencyName, initialbalance, transLog.SFormat(Helpers.GetAccountName(userID), internalCurrencyName, initialbalance),
+            Api.AddTransaction(userID, startingCurrency.InternalName, initialbalance, transLog.SFormat(Helpers.GetAccountName(userID), internalCurrencyName, initialbalance),
                                TransactionProperties.Set);
 
             return acc;

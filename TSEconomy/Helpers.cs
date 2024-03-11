@@ -39,7 +39,7 @@ namespace TSEconomy
             return null;
         }
 
-        // ?? is this necessary when TShock.UserAccounts.GetUserAccountByID exists
+
         public static string? GetAccountName(int UserID)
         {
             if(UserID == -1) 

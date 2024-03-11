@@ -16,7 +16,7 @@ namespace TSEconomy.Commands
             var player = args.Player;
 
             var curr = param.ElementAtOrDefault(0);
-            Currency? currency = curr == default ? Currency.GetFirst() : Currency.Get(curr);
+            Currency? currency = curr == default ? Currency.GetDefault() : Currency.Get(curr);
 
             if (currency == null)
             {
