@@ -1,4 +1,4 @@
-﻿
+
 namespace TSEconomy.Database.Models.Properties
 {
     /// <summary>

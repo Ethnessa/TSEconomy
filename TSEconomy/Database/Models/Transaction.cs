@@ -3,6 +3,9 @@ using TSEconomy.Database.Models.Properties;
 
 namespace TSEconomy.Database.Models
 {
+    /// <summary>
+    /// Represents a transaction in the database.
+    /// </summary>
     [TableName("Transactions")]
     [PrimaryKey("ID")]
     public class Transaction

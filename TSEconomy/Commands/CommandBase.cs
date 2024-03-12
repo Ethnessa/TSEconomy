@@ -10,7 +10,7 @@ namespace TSEconomy.Commands
         public string[] GetAliases()
         {
             var aliases = TSEconomy.Config.Aliases.GetAliases(this);
-            if(aliases.Length < 1)
+            if (aliases.Length < 1)
             {
                 Disabled = true;
             }

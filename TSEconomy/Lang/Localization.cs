@@ -11,12 +11,12 @@ namespace TSEconomy.Lang
     {
         public string Key { get; set; }
         public string Value { get; set; }
-        public KeyValue() 
+        public KeyValue()
         {
             Key = "";
             Value = "";
         }
-        public KeyValue(string key, string value) 
+        public KeyValue(string key, string value)
         {
             Key = key;
             Value = value;
@@ -24,7 +24,7 @@ namespace TSEconomy.Lang
     }
     public static class Localization
     {
-        public static List<string> SupportedLanguages = new List<string> { "Lang_en", "Lang_es", "Lang_ru" };
+        public static List<string> SupportedLanguages = new() { "Lang_en", "Lang_es", "Lang_ru" };
 
         private static Dictionary<string, string> _localizedPluginTexts = new();
 
@@ -51,11 +51,11 @@ namespace TSEconomy.Lang
 
             }
 
-            XmlSerializer serializer = new XmlSerializer(typeof(List<KeyValue>));
+            XmlSerializer serializer = new(typeof(List<KeyValue>));
 
-            using(XmlReader xmlReader = XmlReader.Create(Path.Combine(localizationDirectory, fileName)))
+            using (XmlReader xmlReader = XmlReader.Create(Path.Combine(localizationDirectory, fileName)))
             {
-                List<KeyValue> list= (List<KeyValue>)serializer.Deserialize(xmlReader);
+                List<KeyValue> list = (List<KeyValue>)serializer.Deserialize(xmlReader);
 
                 _localizedPluginTexts = list.ToDictionary(i => i.Key, i => i.Value);
             }
@@ -66,10 +66,10 @@ namespace TSEconomy.Lang
 
         public static string TryGetString(string key, string tag = "")
         {
-            if(!_localizedPluginTexts.TryGetValue(key, out string value))
+            if (!_localizedPluginTexts.TryGetValue(key, out string value))
                 value = key;
 
-            if(tag == "")
+            if (tag == "")
                 return value;
 
             if (tag.Equals("plugin", StringComparison.CurrentCultureIgnoreCase))
@@ -83,11 +83,10 @@ namespace TSEconomy.Lang
         {
             if (SupportedLanguages.Any(i => i == TSEconomy.Config.Language))
                 name = TSEconomy.Config.Language + ".xml";
-            
+
             else
             {
                 name = "Lang_en.xml";
-
                 TShock.Log.ConsoleError($"[TSEconomy Lang] Set value of the 'Language' property in configs is not valid, defaulting to 'en-CA'.\n here are the supported languages: {string.Join(", ", SupportedLanguages)}");
             }
         }

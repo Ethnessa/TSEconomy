@@ -58,7 +58,7 @@ namespace TSEconomy.Configuration
         {
             Instance ??= new Configuration();
 
-            if(!Directory.Exists(TSEconomy.PluginDirectory))
+            if (!Directory.Exists(TSEconomy.PluginDirectory))
                 Directory.CreateDirectory(TSEconomy.PluginDirectory);
 
             File.WriteAllText(configPath, JsonConvert.SerializeObject(Instance, Formatting.Indented));

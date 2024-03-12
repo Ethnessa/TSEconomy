@@ -1,5 +1,4 @@
-﻿
-﻿namespace TSEconomy.Database.Models.Properties
+namespace TSEconomy.Database.Models.Properties
 {
     public enum BalanceOperation
     {

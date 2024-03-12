@@ -6,7 +6,7 @@ namespace TSEconomy.Configuration.Models
     [JsonObject(MemberSerialization.OptIn)]
     public class Aliases
     {
-        internal string[] GetAliases(CommandBase command) 
+        internal string[] GetAliases(CommandBase command)
         {
             return command switch
             {

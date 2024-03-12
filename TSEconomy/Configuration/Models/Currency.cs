@@ -26,6 +26,7 @@
         public bool IsSystemCurrency()
         {
             return this == Api.SystemCurrency;
+
         }
 
         public static Currency? GetDefault()
@@ -36,8 +37,8 @@
         public string GetName(double amount, bool showSymbol = true, bool showName = false, int DecimalsKept = 2)
         {
             string name;
-            string symbol = (showSymbol ? Symbol : "");
-            
+            string symbol = showSymbol ? Symbol : "";
+
             if (amount <= 1)
                 name = PrefixSymbol ? $"{symbol} {Math.Round(amount, DecimalsKept)} {(showName ? DisplayName : "")}" : $"{(showName ? DisplayName : "")} {Math.Round(amount, DecimalsKept)} {symbol}";
 

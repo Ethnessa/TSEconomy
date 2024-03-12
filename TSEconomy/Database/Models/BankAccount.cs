@@ -11,9 +11,11 @@ using TShockAPI;
 namespace TSEconomy.Database.Models
 {
     /// <summary>
+
     /// The main BankAccount class, contains manipulation methods to its fields 
     /// and other helper methods, manual manipulation of fields should be followed
     /// by APi.UpdateBankAccount([bankAccount])
+
     /// </summary>
     [TableName("BankAccounts")]
     [PrimaryKey("ID")]
@@ -223,7 +225,7 @@ namespace TSEconomy.Database.Models
 
         public void SetBalance(double amount, Currency curr, string transLog = "{0}'s balance has been set to {1}. Old bal: {2}")
         {
-            if(transLog == "{0}'s balance has been set to {1}. Old bal: {2}")
+            if (transLog == "{0}'s balance has been set to {1}. Old bal: {2}")
                 transLog = Localization.TryGetString("{0}'s balance has been set to {1}. Old bal: {2}");
 
             double? oldBalance = GetBalance(curr);

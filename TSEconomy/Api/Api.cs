@@ -43,6 +43,7 @@ namespace TSEconomy
         /// to any other currency
         /// </summary>
         public static Currency? SystemCurrency
+
         {
             get
             {
@@ -56,6 +57,7 @@ namespace TSEconomy
         /// </summary>
         public static List<Currency> GetCurrencies()
         {
+
             Currency[] arr = new Currency[Currencies.Count];
 
             Currencies.CopyTo(arr);
@@ -119,6 +121,7 @@ namespace TSEconomy
         /// A reference of the entirety of TSEconomy's bank accounts, it also contains
         /// the world account if it has already been created
         /// </summary>
+
         public static List<BankAccount> BankAccounts
         {
             get; private set;
@@ -242,9 +245,11 @@ namespace TSEconomy
                 var receiverName = Api.GetAccountName(receiver.UserID);
                 var payeeName = Api.GetAccountName(payee.UserID);
 
+
                 payee.TryModifyBalance(amount, curr, BalanceOperation.Subtract, Localization.TryGetString("{{0}} has transfered {{1}} to {0}. Old bal: {{2}} new bal {{3}}").SFormat(receiverName));
 
                 receiver.TryModifyBalance(amount, curr, BalanceOperation.Add, Localization.TryGetString("{{0}} has received {{1}} from {0}. Old bal: {{2}} new bal {{3}}").SFormat(payeeName));
+
 
                 return true;
             }
