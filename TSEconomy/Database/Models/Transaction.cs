@@ -28,24 +28,30 @@ namespace TSEconomy.Database.Models
         [Column("Flags")]
         public TransactionProperties Flags { get; set; }
 
-        public Transaction(int UserID, string internalCurrencyName, double amountChanged, string transDetails, DateTime timeStamp, TransactionProperties flags)
+        /// <summary>
+        /// Represents a transaction in the database.
+        /// </summary>
+        public Transaction(int userID, string internalCurrencyName, double amountChanged, string transDetails, DateTime timeStamp, TransactionProperties flags)
         {
-            this.UserID = UserID;
-            this.InternalCurrencyName = internalCurrencyName;
-            this.Amount = amountChanged;
-            this.TransactionDetails = transDetails;
-            this.Timestamp = timeStamp;
-            this.Flags = flags;
+            UserID = userID;
+            InternalCurrencyName = internalCurrencyName;
+            Amount = amountChanged;
+            TransactionDetails = transDetails;
+            Timestamp = timeStamp;
+            Flags = flags;
         }
 
+        /// <summary>
+        /// Represents a transaction in the database.
+        /// </summary>
         public Transaction(int UserID, string internalCurrencyName, double amountChanged, string transDetails, TransactionProperties flags)
         {
-            this.UserID = UserID;
-            this.InternalCurrencyName = internalCurrencyName;
-            this.Amount = amountChanged;
-            this.TransactionDetails = transDetails;
-            this.Timestamp = DateTime.UtcNow;
-            this.Flags = flags;
+            UserID = UserID;
+            InternalCurrencyName = internalCurrencyName;
+            Amount = amountChanged;
+            TransactionDetails = transDetails;
+            Timestamp = DateTime.UtcNow;
+            Flags = flags;
         }
     }
 }

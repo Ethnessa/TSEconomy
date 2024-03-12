@@ -7,9 +7,13 @@ using TShockAPI;
 
 namespace TSEconomy
 {
+    /// <summary>
+    /// TSEconomy's main plugin class, where the API version is specified and loading / hooking initialization is handled
+    /// </summary>
     [ApiVersion(2, 1)]
     public class TSEconomy : TerrariaPlugin
     {
+
         public override string Author => "TCN";
         public override string Description => "A plugin that adds an economy to your server.";
         public override string Name => "TSEconomy";
@@ -47,9 +51,13 @@ namespace TSEconomy
             DB.InitializeDB(Config.UseMySQL);
 
         }
-
+        /// <summary>
+        /// GameInitialize hook method
+        /// </summary>
+        /// <param name="args"></param>
         public static void OnInitialize(EventArgs args)
         {
+            // initialize localization files
             Localization.SetupLanguage();
 
             // register commands
