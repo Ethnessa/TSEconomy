@@ -4,9 +4,10 @@
 	<!-- Notes: 
 	    - &lt; and &gt; act as replacements for '<' and '>' in XML,
 		- Please only translate the <Value> strings-->
-	
+
 	<!--Added:
-	    - 'The user {0}'s balance for {1} is {2}.'-->
+		- 'Error: tried to get an account's balance for a currency that does not exist.'
+		- '{0} has created a new bank account.'-->
 	
   <KeyValue>
 	  <!-- Description: Showed to the player when inputing the wrong currency in a command-->
@@ -181,8 +182,11 @@
   <KeyValue>
 	  <!-- Description: Log message informing that a player has created a bank account,
 	        {0} is the player name, {1} is the bankaccount's currency and {2}
-			is the initial value at which it was created-->
-    <Key>{0} has created a new bank account ({1}), with the initial value of {2}.</Key>
+			is the initial value at which it was created
+			
+			Before: {0} has created a new bank account ({1}), with the initial value of {2}.
+			After: {0} has created a new bank account.-->
+    <Key>{0} has created a new bank account.</Key>
     <Value>{0} создал новый счет в банке в валюте "{1}" с начальной суммой {2}.</Value>
   </KeyValue>
   <KeyValue>
@@ -279,5 +283,11 @@
 	   	   money's value-->
       <Key>[i:855]The user {0}'s balance for {1} is {2}.</Key>
 	  <Value>[i:855]Баланс игрока {0} в {1}: {2}.</Value>
+  </KeyValue>
+  <KeyValue>
+      <!-- Description: Showed in the console when trying to get a user's balance for an
+			 inexistant currency-->
+	  <Key>Error: tried to get an account's balance for a currency that does not exist.</Key>
+	  <Value>Error: tried to get an account's balance for a currency that does not exist.</Value>
   </KeyValue>
 </ArrayOfKeyValue>

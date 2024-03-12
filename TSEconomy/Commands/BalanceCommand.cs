@@ -16,7 +16,7 @@ namespace TSEconomy.Commands
             var player = args.Player;
 
             var curr = param.ElementAtOrDefault(0);
-            Currency? currency = curr == default ? Currency.GetFirst() : Currency.Get(curr);
+            Currency? currency = curr == default ? Currency.GetDefault() : Currency.Get(curr);
 
             if (currency == null)
             {
@@ -25,7 +25,7 @@ namespace TSEconomy.Commands
             }
 
             var bankAccount = player.GetBankAccount(currency);
-            player.SendMessage(Localization.TryGetString("[i:855]You have {0}!", "Balance").SFormat(currency.GetName(bankAccount.Balance, showName: true)), Color.LightGreen);
+            player.SendMessage(Localization.TryGetString("[i:855]You have {0}!", "Balance").SFormat(currency.GetName((double)bankAccount.GetBalance(currency), showName: true)), Color.LightGreen);
         }
     }
 }

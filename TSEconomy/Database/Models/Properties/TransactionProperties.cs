@@ -1,7 +1,10 @@
-﻿namespace TSEconomy.Database.Models.Properties
+
+namespace TSEconomy.Database.Models.Properties
 {
     /// <summary>
-    /// Flags that determine a transaction type
+    /// Enum to identify whether a transaction adds or set a value
+    /// can be used to track a player's real balance via TSEconomy's
+    /// transaction database
     /// </summary>
     public enum TransactionProperties
     {
