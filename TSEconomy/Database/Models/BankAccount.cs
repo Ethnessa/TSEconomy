@@ -168,7 +168,7 @@ namespace TSEconomy.Database.Models
                 transLog ??= Localization.TryGetString("{0}'s balance has been increased by {1}. Old bal: {2} new bal: {3}");
 
                 if (amount < 0)
-                    return TryModifyBalance(amount, curr, BalanceOperation.Subtract);
+                    return TryModifyBalance(-amount, curr, BalanceOperation.Subtract);
 
                 oldBalance = GetBalance(curr);
 
@@ -182,7 +182,7 @@ namespace TSEconomy.Database.Models
                 transLog ??= Localization.TryGetString("{0}'s balance has been decreased by {1}. Old bal: {2} new bal: {3}");
 
                 if (amount < 0)
-                    return TryModifyBalance(amount, curr, BalanceOperation.Add);
+                    return TryModifyBalance(-amount, curr, BalanceOperation.Add);
 
                 if (GetBalance(curr) < amount && !IsWorldAccount())
                     return false;
