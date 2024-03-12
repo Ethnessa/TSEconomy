@@ -24,9 +24,14 @@ namespace TSEconomy.Configuration
 
         [JsonProperty("Currencies", Order = 4)]
         public Currency[] Currencies { get; set; } = { new() };
+        [JsonProperty("ResetBalancesOnNewWorld", Order = 5)]
+        public bool ResetBalancesOnNewWorld { get; set; } = false;
+
+        [JsonProperty("MaxLogFilesAllowed", Order = 6)]
+        public int MaxLogFilesAllowed { get; set; } = 15;
 
         // try and make this last always if possible
-        [JsonProperty("CommandAliases", Order = 5)]
+        [JsonProperty("CommandAliases", Order = 7)]
         public Aliases Aliases { get; set; } = new();
 
         public static void Load()

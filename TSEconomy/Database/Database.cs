@@ -11,7 +11,7 @@ namespace TSEconomy.Database
         public IDatabase DB;
 
         /// <summary>
-        /// Initializes & connects to the database
+        /// Initializes and connects to the database
         /// </summary>
         /// <param name="useMySQL">If set to true, MySQL will be used. Otherwise, use SQLite</param>
         public void InitializeDB(bool useMySQL, string customSQLitePath = "")

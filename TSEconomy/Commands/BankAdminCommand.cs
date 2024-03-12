@@ -19,7 +19,7 @@ namespace TSEconomy.Commands
             {
                 case string s when s == Localization.TryGetString("setbal"):
                     {
-                        var affectedUser = Helpers.GetUser(parameters.ElementAtOrDefault(0), out var affectedPlayer);
+                        var affectedUser = Api.GetUser(parameters.ElementAtOrDefault(0), out var affectedPlayer);
 
                         if (affectedUser == null)
                         {
@@ -52,8 +52,8 @@ namespace TSEconomy.Commands
                         bool couldParse = int.TryParse(amountInput, out int amnt);
                         if (couldParse && amnt > 0)
                         {
-                            var bankAccount = Api.GetBankAccount(affectedUser.ID, currency);
-                            bankAccount.SetBalance(amnt, Localization.TryGetString("The admin {0} set the user {{0}}'s balance from {{1}} to {{2}}.").SFormat(player.Name));
+                            var bankAccount = Api.GetBankAccount(affectedUser.ID);
+                            bankAccount.SetBalance(amnt, currency, Localization.TryGetString("The admin {0} set the user {{0}}'s balance from {{1}} to {{2}}.").SFormat(player.Name));
 
                             if (affectedPlayer != null)
                             {
@@ -69,7 +69,7 @@ namespace TSEconomy.Commands
                     }
                 case string s when s == Localization.TryGetString("resetbal"):
                     {
-                        var affectedUser = Helpers.GetUser(parameters.ElementAtOrDefault(0), out var affectedPlayer);
+                        var affectedUser = Api.GetUser(parameters.ElementAtOrDefault(0), out var affectedPlayer);
 
                         if (affectedUser == null)
                         {
@@ -92,8 +92,8 @@ namespace TSEconomy.Commands
                             return;
                         }
 
-                        var bankAccount = Api.GetBankAccount(affectedUser.ID, currency);
-                        bankAccount.SetBalance(0, Localization.TryGetString("The admin {0} reset the user {{0}}'s balance from {{2}} to {{1}}.").SFormat(player.Name));
+                        var bankAccount = Api.GetBankAccount(affectedUser.ID);
+                        bankAccount.SetBalance(0, currency, Localization.TryGetString("The admin {0} reset the user {{0}}'s balance from {{2}} to {{1}}.").SFormat(player.Name));
                         if (affectedPlayer != null)
                         {
                             affectedPlayer.SendInfoMessage(Localization.TryGetString("[i:855]Your balance for {0} was reset to 0 by {1}", "plugin").SFormat(currency.DisplayName, player.Name));
@@ -102,7 +102,7 @@ namespace TSEconomy.Commands
                     }
                 case string s when s == Localization.TryGetString("checkbal"):
                     {
-                        var affectedUser = Helpers.GetUser(parameters.ElementAtOrDefault(0), out _);
+                        var affectedUser = Api.GetUser(parameters.ElementAtOrDefault(0), out _);
 
                         if (affectedUser == null)
                         {
@@ -125,8 +125,8 @@ namespace TSEconomy.Commands
                             return;
                         }
 
-                        var bankAccount = Api.GetBankAccount(affectedUser.ID, currency);
-                        player.SendInfoMessage(Localization.TryGetString("[i:855]The user {0}'s balance for {1} is {2}.", "CheckBalance").SFormat(affectedUser.Name, currency.DisplayName, currency.GetName(bankAccount.Balance)));
+                        var bankAccount = Api.GetBankAccount(affectedUser.ID);
+                        player.SendInfoMessage(Localization.TryGetString("[i:855]The user {0}'s balance for {1} is {2}.", "CheckBalance").SFormat(affectedUser.Name, currency.DisplayName, currency.GetName((double)bankAccount.GetBalance(currency))));
                         return;
                     }
             }

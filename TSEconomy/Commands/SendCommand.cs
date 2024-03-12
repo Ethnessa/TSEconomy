@@ -21,7 +21,7 @@ namespace TSEconomy.Commands
                 return;
             }
 
-            var sendingTo = Helpers.GetUser(param.ElementAtOrDefault(0), out var receiverPlayer);
+            var sendingTo = Api.GetUser(param.ElementAtOrDefault(0), out var receiverPlayer);
 
             if (sendingTo == null)
             {
@@ -36,7 +36,7 @@ namespace TSEconomy.Commands
             }
 
             var curr = param.ElementAtOrDefault(1);
-            Currency? currency = curr == default ? Currency.GetFirst() : Currency.Get(curr);
+            Currency? currency = curr == default ? Currency.GetDefault() : Currency.Get(curr);
 
             if (currency == null)
             {
@@ -57,9 +57,9 @@ namespace TSEconomy.Commands
                 return;
             }
 
-            var bankAccount = Api.GetBankAccount(player.GetUserId(), currency);
-            var receiverAccount = Api.GetBankAccount(sendingTo.ID, currency);
-            var success = bankAccount.TryTransferTo(receiverAccount, amnt);
+            var bankAccount = Api.GetBankAccount(player.GetUserId());
+            var receiverAccount = Api.GetBankAccount(sendingTo.ID);
+            var success = bankAccount.TryTransferTo(receiverAccount, currency, amnt);
 
             if (!success)
             {
