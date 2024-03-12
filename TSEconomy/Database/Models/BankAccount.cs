@@ -1,11 +1,11 @@
 ﻿using Newtonsoft.Json;
 using NuGet.Protocol;
-using Org.BouncyCastle.Crypto.Generators;
 using PetaPoco;
 using Terraria;
 using TSEconomy.Configuration.Models;
 using TSEconomy.Database.Models.Properties;
 using TSEconomy.Lang;
+using TSEconomy.Logging;
 using TShockAPI;
 
 namespace TSEconomy.Database.Models
@@ -30,20 +30,25 @@ namespace TSEconomy.Database.Models
         public BankAccountProperties Flags { get; set; }
 
         [Column("Balance")]
-        public string JsonBalance { get; private set; } = new Dictionary<string, double>().ToJson();
+        public string JsonBalance { get; private set; }
 
         /// <summary>
         /// a deserialized copy of JsonBalance.
         /// </summary>
     
-        public Dictionary<string, double> Balance {
+        public Dictionary<string, double> ?Balance {
             get 
             {
                 return (Dictionary<string, double>)JsonConvert.DeserializeObject(JsonBalance, typeof(Dictionary<string, double>));
             }
-            private set { } 
-        }  
-        public double? GetBalance(Currency curr)
+
+        } 
+        
+        public void Reset()
+        {
+            JsonBalance = new Dictionary<string, double>().ToJson();
+        }
+        public double ?GetBalance(Currency curr)
         {
             if (!Api.IsCurrencyValid(curr))
             {
@@ -90,14 +95,15 @@ namespace TSEconomy.Database.Models
             }
 
             if (Api.HasBankAccount(userID))
-                return Api.GetBankAccount(userID, curr);
+                return Api.GetBankAccount(userID);
 
 
             var acc = new BankAccount()
             {
                 Flags = flags,
                 UserID = userID,
-                WorldID = Main.worldID
+                WorldID = Main.worldID,
+                JsonBalance = new Dictionary<string, double>().ToJson()
             };
 
             acc.SetBalance(initializedCurrencyValue, startingCurrency);
@@ -107,78 +113,97 @@ namespace TSEconomy.Database.Models
             if (acc.IsWorldAccount())
                 return acc;
 
-            Api.AddTransaction(userID, startingCurrency.InternalName, initialbalance, transLog.SFormat(Helpers.GetAccountName(userID), internalCurrencyName, initialbalance),
-                               TransactionProperties.Set);
+            TransactionLogging.Log(transLog.SFormat(Api.GetAccountName(acc.UserID)));
 
             return acc;
 
         }
 
-        // we have two variants as we might not want the logs to show -amount 
-        public bool TryAddBalance(double amount, string transLog = "{0}'s balance has been increased by {1}. Old bal: {2} new bal: {3}")
+        public bool TryAddBalance(double amount, Currency curr, string transLog = "{0}'s balance has been increased by {1}. Old bal: {2} new bal: {3}")
         {
             if(transLog == "{0}'s balance has been increased by {1}. Old bal: {2} new bal: {3}")
                 transLog = Localization.TryGetString("{0}'s balance has been increased by {1}. Old bal: {2} new bal: {3}");
 
             if (amount < 0)
-                return TryAddBalance(-amount, transLog);
+                return TryRemoveBalance(-amount, curr);
 
-            _balance += amount;
+            double? oldBalance = GetBalance(curr);
+
+            var newDict = Balance;
+            newDict[curr.InternalName] += amount;
+
+            JsonBalance = newDict.ToJson();
 
             Api.UpdateBankAccount(this);
 
             if (IsWorldAccount())
                 return true;
 
-            Api.AddTransaction(UserID, InternalCurrencyName, amount, transLog.SFormat(Helpers.GetAccountName(UserID), amount, Balance - amount, Balance),
+            Api.AddTransaction(UserID, curr.InternalName, amount, transLog.SFormat(Api.GetAccountName(UserID), amount, oldBalance, GetBalance(curr)),
                                TransactionProperties.Add);
 
             return true;
         }
 
-        public bool TryRemoveBalance(double amount, string transLog = "{0}'s balance has been decreased by {1}. Old bal: {2} new bal: {3}")
+        public bool TryRemoveBalance(double amount, Currency curr ,string transLog = "{0}'s balance has been decreased by {1}. Old bal: {2} new bal: {3}")
         {
             if(transLog == "{0}'s balance has been decreased by {1}. Old bal: {2} new bal: {3}")
                 transLog = Localization.TryGetString("{0}'s balance has been decreased by {1}. Old bal: {2} new bal: {3}");
 
-            if (_balance < amount && !IsWorldAccount())
+            if (amount < 0)
+                return TryAddBalance(-amount, curr);
+
+            if (Balance[curr.InternalName] < amount && !IsWorldAccount())
                 return false;
 
-            _balance -= amount;
+            double? oldBalance = GetBalance(curr);
+
+            var newDict = Balance;
+            newDict[curr.InternalName] -= amount;
+
+            JsonBalance = newDict.ToJson();
+
             Api.UpdateBankAccount(this);
 
             if (IsWorldAccount())
                 return true;
 
-            Api.AddTransaction(UserID, InternalCurrencyName, amount, transLog.SFormat(Helpers.GetAccountName(UserID), amount, Balance + amount, Balance),
+            Api.AddTransaction(UserID, curr.InternalName, -amount, transLog.SFormat(Api.GetAccountName(UserID), amount, oldBalance, GetBalance(curr)),
                                TransactionProperties.Add);
 
             return true;
         }
 
-        // UNDONE
-        /// <summary>
-        /// once implemented we'll want tryremovebalance and tryaddbalance to use it to with the world account. 
-        /// </summary>
-        public void SetBalance(double amount, string transLog = "{0}'s balance has been set to {1}. Old bal: {2}")
+
+        public void SetBalance(double amount, Currency curr, string transLog = "{0}'s balance has been set to {1}. Old bal: {2}")
         {
             if(transLog == "{0}'s balance has been set to {1}. Old bal: {2}")
                 transLog = Localization.TryGetString("{0}'s balance has been set to {1}. Old bal: {2}");
 
-            double oldBalance = _balance;
+            double? oldBalance = GetBalance(curr);
 
-            _balance = amount;
+            var newDict = Balance;
+            newDict[curr.InternalName] = amount;
+
+            JsonBalance = newDict.ToJson();
+
             Api.UpdateBankAccount(this);
 
             if (IsWorldAccount())
                 return;
 
-            Api.AddTransaction(UserID, InternalCurrencyName, amount, transLog.SFormat(Helpers.GetAccountName(UserID), amount, oldBalance), TransactionProperties.Set);
+            Api.AddTransaction(UserID, curr.InternalName, amount, transLog.SFormat(Api.GetAccountName(UserID), amount, oldBalance), TransactionProperties.Set);
         }
+        /// <summary>
+        /// Its bettter to use this with the worldAccount for adding and removing money from the account
+        /// </summary>
+        /// <param name="receiver"></param>
+        /// <param name="amount"></param>
+        /// <returns></returns>
 
-        public bool TryTransferTo(BankAccount receiver, double amount)
+        public bool TryTransferTo(BankAccount receiver, Currency curr, double amount)
         {
-            return Api.TryTransferTo(this, receiver, amount);
+            return Api.TryTransferbetween(this, receiver, curr, amount);
         }
 
         public bool HasPermission(string perm)
@@ -186,14 +211,14 @@ namespace TSEconomy.Database.Models
             return TShock.Groups.groups.First(i => i.Name == TShock.UserAccounts.GetUserAccountByID(UserID).Group).HasPermission(perm);
         }
 
-        public bool HasEnough(double amount)
+        public bool HasEnough(double amount, Currency curr)
         {
-            return Api.HasEnough(this, amount);
+            return Api.HasEnough(this, curr, amount);
         }
 
-        public Transaction AddTransaction(double amountChanged, string transLog, TransactionProperties flag)
+        public Transaction AddTransaction(double amountChanged, Currency curr,string transLog, TransactionProperties flag)
         {
-            return Api.AddTransaction(UserID, InternalCurrencyName, amountChanged, transLog, flag);
+            return Api.AddTransaction(UserID, curr.InternalName, amountChanged, transLog, flag);
         }
 
         public bool IsWorldAccount()

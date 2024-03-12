@@ -21,7 +21,7 @@ namespace TSEconomy.Extensions
             if (!player.RealPlayer)
                 return Api.WorldAccount;
 
-            return Api.GetBankAccount(player.Account.ID, curr);
+            return Api.GetBankAccount(player.Account.ID);
         }
 
         public static bool HasBankAccount(this TSPlayer player, Currency curr)
@@ -29,7 +29,7 @@ namespace TSEconomy.Extensions
             if (!player.RealPlayer)
                 return true;
 
-            return Api.HasBankAccount(player.Account.ID, curr);
+            return Api.HasBankAccount(player.Account.ID);
         }
 
 

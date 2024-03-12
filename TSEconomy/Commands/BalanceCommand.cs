@@ -25,7 +25,7 @@ namespace TSEconomy.Commands
             }
 
             var bankAccount = player.GetBankAccount(currency);
-            player.SendMessage(Localization.TryGetString("[i:855]You have {0}!", "Balance").SFormat(currency.GetName(bankAccount.Balance, showName: true)), Color.LightGreen);
+            player.SendMessage(Localization.TryGetString("[i:855]You have {0}!", "Balance").SFormat(currency.GetName((double)bankAccount.GetBalance(currency), showName: true)), Color.LightGreen);
         }
     }
 }

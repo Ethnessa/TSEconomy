@@ -2,6 +2,7 @@
 using TerrariaApi.Server;
 using TSEconomy.Configuration.Models;
 using TSEconomy.Lang;
+using TSEconomy.Logging;
 using TShockAPI;
 
 namespace TSEconomy
@@ -71,6 +72,44 @@ namespace TSEconomy
 
             Api.Currencies.AddRange(Config.Currencies);
 
+            // Cache acounts
+            Api.LoadAccounts();
+
+            // If some accounts are bound to other worlds they shall reset
+            if (Config.ResetBalancesOnNewWorld) HandleBalanceReset();
+
+            TransactionLogging.PurgeOldLogs();
+
+        }
+
+        private static void HandleBalanceReset()
+        {
+            var selectedAccounts = Api.BankAccounts.Where(i => i.WorldID != Main.worldID
+                                                               && i.UserID != -1
+                                                               && !TSPlayer.FindByNameOrID(Api.GetAccountName(i.UserID)).First().
+                                                                  HasPermission(Permissions.ResetIgnoreBindingToWorld));
+
+            if (!selectedAccounts.Any()) return;
+           
+            
+            TShock.Log.ConsoleWarn("[TSEconomy] New world dectected! Found {0} accounts not belonging to this world! Do you want to reset their balance? (Y/N):", selectedAccounts.Count());
+            var str = Console.ReadLine();
+
+            if (!str.ToUpper().StartsWith("Y"))
+            {
+                TShock.Log.ConsoleWarn("[TSEconomy] Canceling reset...");
+                return;
+            }
+            
+
+            for ( int i = 0; i < selectedAccounts.Count(); i++)
+            {
+                selectedAccounts.TryGetValue(i, out var account);
+
+                account.Reset();
+            }
+
+            TShock.Log.ConsoleInfo("[TSEconomy] Sucessfully reseted {0} accounts!", selectedAccounts.Count());
 
         }
 
