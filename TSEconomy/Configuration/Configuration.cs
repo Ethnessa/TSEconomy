@@ -8,7 +8,7 @@ namespace TSEconomy.Configuration
     [JsonObject(MemberSerialization.OptIn)]
     public class Configuration
     {
-        private static string s_path = Path.Combine(TSEconomy.PluginDirectory, "TSEconomy.json");
+        private static string configPath = Path.Combine(TSEconomy.PluginDirectory, "TSEconomy.json");
         public static Configuration Instance { get; set; }
 
         [JsonProperty("UseMySQL", Order = 0)]
@@ -31,9 +31,9 @@ namespace TSEconomy.Configuration
 
         public static void Load()
         {
-            if (File.Exists(s_path))
+            if (File.Exists(configPath))
             {
-                string json = File.ReadAllText(s_path);
+                string json = File.ReadAllText(configPath);
                 try
                 {
                     Instance = JsonConvert.DeserializeObject<Configuration>(json);
@@ -56,7 +56,7 @@ namespace TSEconomy.Configuration
             if (!Directory.Exists(TSEconomy.PluginDirectory))
                 Directory.CreateDirectory(TSEconomy.PluginDirectory);
 
-            File.WriteAllText(s_path, JsonConvert.SerializeObject(Instance, Formatting.Indented));
+            File.WriteAllText(configPath, JsonConvert.SerializeObject(Instance, Formatting.Indented));
         }
     }
 }

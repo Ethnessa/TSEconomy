@@ -87,7 +87,6 @@ namespace TSEconomy.Lang
             else
             {
                 name = "Lang_en.xml";
-
                 TShock.Log.ConsoleError($"[TSEconomy Lang] Set value of the 'Language' property in configs is not valid, defaulting to 'en-CA'.\n here are the supported languages: {string.Join(", ", SupportedLanguages)}");
             }
         }
