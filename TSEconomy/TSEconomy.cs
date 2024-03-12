@@ -94,8 +94,7 @@ namespace TSEconomy
         {
             var selectedAccounts = Api.BankAccounts.Where(i => i.WorldID != Main.worldID
                                                                && i.UserID != -1
-                                                               && !TSPlayer.FindByNameOrID(Api.GetAccountName(i.UserID)).First().
-                                                                  HasPermission(Permissions.ResetIgnoreBindingToWorld));
+                                                               && !i.HasPermission(Permissions.ResetIgnoreBindingToWorld));
 
             if (!selectedAccounts.Any()) return;
            

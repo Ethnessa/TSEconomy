@@ -55,6 +55,7 @@ namespace TSEconomy.Database.Models
         public void Reset()
         {
             JsonBalance = new Dictionary<string, double>().ToJson();
+            TransactionLogging.Log("Reseted {0} balance for every currency!".SFormat(Api.GetAccountName(UserID)));
             Api.UpdateBankAccount(this);
         }
         /// <summary>
