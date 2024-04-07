@@ -8,7 +8,7 @@ namespace TSEconomy.Commands
     {
         public override string[] PermissionNodes { get; set; } = { Permissions.Admin };
 
-        public override void Execute(CommandArgs args)
+        public override async void Execute(CommandArgs args)
         {
             var player = args.Player;
             var parameters = args.Parameters;
@@ -53,7 +53,7 @@ namespace TSEconomy.Commands
                         if (couldParse && amnt > 0)
                         {
                             var bankAccount = Api.GetBankAccount(affectedUser.ID);
-                            bankAccount.SetBalance(amnt, currency, Localization.TryGetString("The admin {0} set the user {{0}}'s balance from {{1}} to {{2}}.").SFormat(player.Name));
+                            await bankAccount.SetBalanceAsync(amnt, currency, Localization.TryGetString("The admin {0} set the user {{0}}'s balance from {{1}} to {{2}}.").SFormat(player.Name));
 
                             if (affectedPlayer != null)
                             {
@@ -93,11 +93,12 @@ namespace TSEconomy.Commands
                         }
 
                         var bankAccount = Api.GetBankAccount(affectedUser.ID);
-                        bankAccount.SetBalance(0, currency, Localization.TryGetString("The admin {0} reset the user {{0}}'s balance from {{2}} to {{1}}.").SFormat(player.Name));
+                        
+                        await bankAccount.SetBalanceAsync(0, currency, Localization.TryGetString("The admin {0} reset the user {{0}}'s balance from {{2}} to {{1}}.").SFormat(player.Name));
+                        
                         if (affectedPlayer != null)
-                        {
                             affectedPlayer.SendInfoMessage(Localization.TryGetString("[i:855]Your balance for {0} was reset to 0 by {1}", "plugin").SFormat(currency.DisplayName, player.Name));
-                        }
+                        
                         return;
                     }
                 case string s when s == Localization.TryGetString("checkbal"):

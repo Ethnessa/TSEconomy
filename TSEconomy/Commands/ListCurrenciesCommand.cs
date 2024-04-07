@@ -7,7 +7,7 @@ namespace TSEconomy.Commands
     {
         public override string[] PermissionNodes { get; set; } = { Permissions.User, Permissions.ListCurrencies };
 
-        public override void Execute(CommandArgs args)
+        public override async void Execute(CommandArgs args)
         {
             var param = args.Parameters;
             var player = args.Player;

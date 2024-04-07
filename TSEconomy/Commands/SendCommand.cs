@@ -10,7 +10,7 @@ namespace TSEconomy.Commands
     {
         public override string[] PermissionNodes { get; set; } = { Permissions.User, Permissions.Send };
         // send <player> <currency> <amount>
-        public override void Execute(CommandArgs args)
+        public override async void Execute(CommandArgs args)
         {
             var param = args.Parameters;
             var player = args.Player;
@@ -59,7 +59,7 @@ namespace TSEconomy.Commands
 
             var bankAccount = Api.GetBankAccount(player.GetUserId());
             var receiverAccount = Api.GetBankAccount(sendingTo.ID);
-            var success = bankAccount.TryTransferTo(receiverAccount, currency, amnt);
+            var success = await bankAccount.TryTransferToAsync(receiverAccount, currency, amnt);
 
             if (!success)
             {
@@ -70,7 +70,7 @@ namespace TSEconomy.Commands
             player.SendMessage(Localization.TryGetString("[i:855]You sent {0} to {1}", "Send").SFormat(currency.GetName(amnt, showName: true), sendingTo.Name), Color.LightGreen);
 
             receiverPlayer?.SendMessage(Localization.TryGetString("[i:855]You have been sent {0}{1}.", "plugin")
-                              .SFormat(currency.GetName(amnt, showName: true), args.Silent ? "" : Localization.TryGetString(" by {0}").SFormat(player.Name)), Color.LightGreen);
+                           .SFormat(currency.GetName(amnt, showName: true), args.Silent ? "" : Localization.TryGetString(" by {0}").SFormat(player.Name)), Color.LightGreen);
         }
     }
 }

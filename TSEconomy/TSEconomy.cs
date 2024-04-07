@@ -4,6 +4,7 @@ using TSEconomy.Configuration.Models;
 using TSEconomy.Lang;
 using TSEconomy.Logging;
 using TShockAPI;
+using TShockAPI.Hooks;
 
 namespace TSEconomy
 {
@@ -64,12 +65,7 @@ namespace TSEconomy
             Commands.Commands.RegisterAll();
 
             // register hooks
-            TShockAPI.Hooks.GeneralHooks.ReloadEvent += (x) =>
-            {
-                Configuration.Configuration.Load();
-                Commands.Commands.Refresh();
-                x.Player.SendSuccessMessage(Localization.TryGetString("[i:855]Reloaded config.", "plugin"));
-            };
+            TShockAPI.Hooks.GeneralHooks.ReloadEvent += OnReload;
 
             // Load currencies
 
@@ -87,6 +83,15 @@ namespace TSEconomy
             if (Config.ResetBalancesOnNewWorld) HandleBalanceReset();
 
             TransactionLogging.PurgeOldLogs();
+
+        }
+
+        private static void OnReload(ReloadEventArgs args)
+        {
+
+            Configuration.Configuration.Load();
+            Commands.Commands.Refresh();
+            args.Player.SendSuccessMessage(Localization.TryGetString("[i:855]Reloaded config.", "plugin"));
 
         }
 
@@ -120,6 +125,18 @@ namespace TSEconomy
 
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            TransactionLogging.ForceWrite();
+
+            if (disposing)
+            {
+                ServerApi.Hooks.GameInitialize.Deregister(this, OnInitialize);
+                TShockAPI.Hooks.GeneralHooks.ReloadEvent -= OnReload;
+            }
+
+            base.Dispose(disposing);
+        }
 
     }
 }

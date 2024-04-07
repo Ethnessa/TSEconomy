@@ -23,6 +23,11 @@ namespace TSEconomy
             BankAccounts.AddRange(DB.Query<BankAccount>("SELECT * FROM BankAccounts").ToList());
         }
 
+        internal static async Task LoadAccountsAsync()
+        {
+            await Task.Run(() => LoadAccounts());
+        }
+
         /// <summary>
         /// Static instance of our config, can also be access more simply with TSEconomy.Config
         /// </summary>
@@ -160,6 +165,12 @@ namespace TSEconomy
             TransactionLogging.Log(trans);
         }
 
+        public static async Task InsertTransactionAsync(Database.Models.Transaction trans)
+        {
+            await Task.Run(() => InsertTransaction(trans));
+        }
+
+
         /// <summary>
         /// Checks for whether or not the specified player has a bank account
         /// in TSEconomy's database
@@ -204,6 +215,11 @@ namespace TSEconomy
         {
             DB.Update(account);
         }
+
+        public static async Task UpdateBankAccountAsync(BankAccount account)
+        {
+            await Task.Run(() => UpdateBankAccount(account));
+        }
         /// <summary>
         /// Inserts the specified bank account in TSEconomy's database 
         /// and listed bank accounts
@@ -213,6 +229,11 @@ namespace TSEconomy
         {
             DB.Insert(account);
             BankAccounts.Add(account);
+        }
+
+        public static async Task InsertBankAccountAsync(BankAccount account)
+        {
+            await Task.Run(() => InsertBankAccount(account));
         }
 
         /// <summary>
@@ -225,6 +246,12 @@ namespace TSEconomy
             DB.Delete(account);
             BankAccounts.Remove(account);
         }
+
+        public static async Task DeleteBankAccountAsync(BankAccount account)
+        {
+            await Task.Run(() => DeleteBankAccount(account));
+        }
+
 
         /// <summary>
         /// Tranfers between the payee and the receiver, returns false if
@@ -256,6 +283,11 @@ namespace TSEconomy
             return false;
         }
 
+        public static async Task<bool> TryTransferbetweenAsync(BankAccount payee, BankAccount receiver, Currency curr, double amount)
+        {
+            return await Task.Run(() => TryTransferbetween(payee, receiver, curr, amount));
+        }
+
         /// <summary>
         /// adds a transaction
         /// </summary>
@@ -271,6 +303,11 @@ namespace TSEconomy
 
             InsertTransaction(trans);
             return trans;
+        }
+
+        public static async Task<Database.Models.Transaction> AddTransactionAsync(int userID, string internalCurrencyName, double amountChanged, string transLogMessage, TransactionProperties flags)
+        {
+            return await Task.Run(() => AddTransaction(userID, internalCurrencyName, amountChanged, transLogMessage, flags));
         }
 
         /// <summary>

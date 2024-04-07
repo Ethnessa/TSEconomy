@@ -29,9 +29,11 @@ namespace TSEconomy.Configuration
 
         [JsonProperty("MaxLogFilesAllowed", Order = 6)]
         public int MaxLogFilesAllowed { get; set; } = 15;
+        [JsonProperty("LogsToQueueBeforeWriting", Order = 7)]
+        public int LogsToQueueBeforeWriting { get; set; } = 7;
 
         // try and make this last always if possible
-        [JsonProperty("CommandAliases", Order = 7)]
+        [JsonProperty("CommandAliases", Order = 8)]
         public Aliases Aliases { get; set; } = new();
 
         public static void Load()

@@ -42,13 +42,9 @@ namespace TSEconomy.Database.Models
         /// <summary>
         /// a deserialized copy of JsonBalance.
         /// </summary>
-    
-        public Dictionary<string, double> ?Balance {
-            get 
-            {
-                return (Dictionary<string, double>)JsonConvert.DeserializeObject(JsonBalance, typeof(Dictionary<string, double>));
-            }
 
+        public Dictionary<string, double> ?GetBalance() {
+            return (Dictionary<string, double>)JsonConvert.DeserializeObject(JsonBalance, typeof(Dictionary<string, double>));
         } 
         
         /// <summary>
@@ -60,6 +56,8 @@ namespace TSEconomy.Database.Models
             TransactionLogging.Log("Reseted {0} balance for every currency!".SFormat(Api.GetAccountName(UserID)));
             Api.UpdateBankAccount(this);
         }
+
+
         /// <summary>
         /// Gets the balance for the specified currency of this account
         /// </summary>
@@ -73,10 +71,10 @@ namespace TSEconomy.Database.Models
                 return null;
             }
 
-            if (!Balance.ContainsKey(curr.InternalName))
+            if (!GetBalance().ContainsKey(curr.InternalName))
                 AddCurrency(curr);
 
-            return Balance[curr.InternalName];
+            return GetBalance()[curr.InternalName];
 
         }
 
@@ -87,10 +85,10 @@ namespace TSEconomy.Database.Models
         /// <returns></returns>
         public bool AddCurrency(Currency curr)
         {
-            if (!Api.IsCurrencyValid(curr) || Balance.ContainsKey(curr.InternalName))
+            if (!Api.IsCurrencyValid(curr) || GetBalance().ContainsKey(curr.InternalName))
                 return false;
 
-            var newDict = Balance;
+            var newDict = GetBalance();
             newDict.Add(curr.InternalName, 0f);
 
             JsonBalance = newDict.ToJson();
@@ -150,6 +148,11 @@ namespace TSEconomy.Database.Models
 
         }
 
+        public static async Task<BankAccount?> TryCreateNewAccountAsync(Currency startingCurrency, double initializedCurrencyValue, int userID, BankAccountProperties flags = BankAccountProperties.Default,
+                                               string transLog = "{0} has created a new bank")
+        {
+            return await Task.Run(() => TryCreateNewAccount(startingCurrency, initializedCurrencyValue, userID, flags));
+        }
         /// <summary>
         /// Attempts to modify the balance of the bank account.
         /// </summary>
@@ -172,7 +175,7 @@ namespace TSEconomy.Database.Models
 
                 oldBalance = GetBalance(curr);
 
-                var newDict = Balance;
+                var newDict = GetBalance();
                 newDict[curr.InternalName] += amount;
 
                 JsonBalance = newDict.ToJson();
@@ -189,7 +192,7 @@ namespace TSEconomy.Database.Models
 
                 oldBalance = GetBalance(curr);
 
-                var newDict = Balance;
+                var newDict = GetBalance();
                 newDict[curr.InternalName] -= amount;
 
                 JsonBalance = newDict.ToJson();
@@ -216,6 +219,11 @@ namespace TSEconomy.Database.Models
             return true;
         }
 
+        public async Task<bool> TryModifyBalanceAsync(double amount, Currency curr, BalanceOperation operationType, string transLog = null)
+        {
+            return await Task.Run(() => TryModifyBalance( amount, curr, operationType, transLog));
+        }
+
         /// <summary>
         /// sets the account's balance for the specified currency to the specified amount
         /// </summary>
@@ -230,7 +238,7 @@ namespace TSEconomy.Database.Models
 
             double? oldBalance = GetBalance(curr);
 
-            var newDict = Balance;
+            var newDict = GetBalance();
             newDict[curr.InternalName] = amount;
 
             JsonBalance = newDict.ToJson();
@@ -242,7 +250,13 @@ namespace TSEconomy.Database.Models
 
             Api.AddTransaction(UserID, curr.InternalName, amount, transLog.SFormat(Api.GetAccountName(UserID), amount, oldBalance), TransactionProperties.Set);
         }
-        
+
+
+        public async Task SetBalanceAsync(double amount, Currency curr, string transLog = "{0}'s balance has been set to {1}. Old bal: {2}")
+        {
+            await Task.Run(() => SetBalance(amount, curr, transLog));
+        }
+
         /// <summary>
         /// Transfers the specified amount to the specified account for the stated currency,
         /// it is used to transfer with the worldAccount for adding and removing money from the account from monster gains for instance
@@ -251,6 +265,11 @@ namespace TSEconomy.Database.Models
         public bool TryTransferTo(BankAccount receiver, Currency curr, double amount)
         {
             return Api.TryTransferbetween(this, receiver, curr, amount);
+        }
+
+        public async Task<bool> TryTransferToAsync(BankAccount receiver, Currency curr, double amount)
+        {
+            return await Task.Run(() => TryTransferTo(receiver, curr, amount));
         }
 
         /// <summary>
@@ -286,6 +305,11 @@ namespace TSEconomy.Database.Models
         public Transaction AddTransaction(double amountChanged, Currency curr,string transLog, TransactionProperties flag)
         {
             return Api.AddTransaction(UserID, curr.InternalName, amountChanged, transLog, flag);
+        }
+
+        public async Task<Transaction> AddTransactionAsync(double amountChanged, Currency curr, string transLog, TransactionProperties flag)
+        {
+            return await Task.Run(() => AddTransaction(amountChanged, curr, transLog, flag));
         }
 
         /// <summary>

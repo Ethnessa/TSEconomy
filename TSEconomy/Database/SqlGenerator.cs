@@ -19,6 +19,7 @@ namespace TSEconomy.Database
 
             foreach (var prop in type.GetProperties())
             {
+
                 var columnAttribute = prop.GetCustomAttribute<ColumnAttribute>();
                 var columnName = columnAttribute?.Name ?? prop.Name;
                 var columnType = GetColumnType(prop.PropertyType, dbProvider);
