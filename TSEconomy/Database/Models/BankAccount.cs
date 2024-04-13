@@ -7,6 +7,7 @@ using TSEconomy.Database.Models.Properties;
 using TSEconomy.Lang;
 using TSEconomy.Logging;
 using TShockAPI;
+using TShockAPI.DB;
 
 namespace TSEconomy.Database.Models
 {
@@ -44,6 +45,9 @@ namespace TSEconomy.Database.Models
         /// </summary>
 
         public Dictionary<string, double> ?GetBalance() {
+
+            if (String.IsNullOrEmpty(JsonBalance)) JsonBalance = JsonConvert.SerializeObject(new Dictionary<string, double>());
+
             return (Dictionary<string, double>)JsonConvert.DeserializeObject(JsonBalance, typeof(Dictionary<string, double>));
         } 
         
@@ -135,9 +139,9 @@ namespace TSEconomy.Database.Models
                 JsonBalance = new Dictionary<string, double>().ToJson()
             };
 
-            acc.SetBalance(initializedCurrencyValue, startingCurrency);
-
             Api.InsertBankAccount(acc);
+
+            acc.SetBalance(initializedCurrencyValue, startingCurrency);
 
             if (acc.IsWorldAccount())
                 return acc;
@@ -319,6 +323,16 @@ namespace TSEconomy.Database.Models
         public bool IsWorldAccount()
         {
             return Flags == BankAccountProperties.WorldAccount;
+        }
+
+        public string GetAccountName()
+        {
+            return Api.GetAccountName(UserID);
+        }
+
+        public UserAccount GetAccount()
+        {
+            return Api.GetUser(GetAccountName(), out _);
         }
 
 

@@ -15,7 +15,7 @@ namespace TSEconomy.Commands
             var param = args.Parameters;
             var player = args.Player;
 
-            if (param.ElementAtOrDefault(0) == default)
+            if (param.ElementAtOrDefault(0) == default || param.Count < 3 || param.Count > 3)
             {
                 player.SendInfoMessage(Localization.TryGetString("[i:855]Please use the command as follows: /{0} <player> <currency> <amount>", "Send").SFormat(ShortestAlias));
                 return;

@@ -347,7 +347,8 @@ namespace TSEconomy
                 return onlinePlayer.Account;
             }
 
-            var account = TShock.UserAccounts.GetUserAccountByName(userInput);
+            var account = TShock.UserAccounts.GetUserAccounts().FirstOrDefault(i => i.Name.StartsWith(userInput));
+
             if (account != null)
             {
                 onlinePlayer = TShock.Players.FirstOrDefault(x => x?.Account?.Name == account.Name);

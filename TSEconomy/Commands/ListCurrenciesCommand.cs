@@ -7,7 +7,7 @@ namespace TSEconomy.Commands
     {
         public override string[] PermissionNodes { get; set; } = { Permissions.User, Permissions.ListCurrencies };
 
-        public override async void Execute(CommandArgs args)
+        public override void Execute(CommandArgs args)
         {
             var param = args.Parameters;
             var player = args.Player;
@@ -15,7 +15,7 @@ namespace TSEconomy.Commands
             var currList = Api.GetCurrencies();
             currList.RemoveAt(0);
 
-            var currNames = currList.Select(x => x.DisplayName);
+            var currNames = currList.Select(x => "- " + x.DisplayName);
 
             var page = param.ElementAtOrDefault(0) == default ? 1 : int.Parse(param[0]);
             var pageSize = 10;

@@ -19,6 +19,8 @@ namespace TSEconomy.Logging
         public static List<string> LogsToWrite { get; set; }
         public static void Log(string str, bool timeStamp = true)
         {
+            if (LogsToWrite == null) LogsToWrite = new();
+
             LogsToWrite.Add($"{(timeStamp ? ("[" + DateTime.UtcNow + "] ") : "")}" + str);
 
             if (LogsToWrite.Count > TSEconomy.Config.MaxLogFilesAllowed) ForceWrite();

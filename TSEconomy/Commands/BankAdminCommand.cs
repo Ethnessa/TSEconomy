@@ -13,13 +13,23 @@ namespace TSEconomy.Commands
             var player = args.Player;
             var parameters = args.Parameters;
 
+            if(parameters.Count < 3 || parameters.Count > 4)
+            {
+                player.SendWarningMessage("[TSEconomy BankAdmin] [i:855] BankAdmin Command usage:");
+                player.SendWarningMessage("\'{0}{1} setbal [player] [currency] [amount]\' - sets the balance of the player.", TShock.Config.Settings.CommandSpecifier, ShortestAlias);
+                player.SendWarningMessage("\'{0}{1} resetbal [player] [currency]\' - resets the balance of the player for the specified currency.", TShock.Config.Settings.CommandSpecifier, ShortestAlias);
+                return;
+            }
+
+
             var subcmd = parameters[0].ToLower();
 
             switch (subcmd)
             {
                 case string s when s == Localization.TryGetString("setbal"):
                     {
-                        var affectedUser = Api.GetUser(parameters.ElementAtOrDefault(0), out var affectedPlayer);
+
+                        var affectedUser = Api.GetUser(parameters.ElementAtOrDefault(1), out var affectedPlayer);
 
                         if (affectedUser == null)
                         {
@@ -27,7 +37,7 @@ namespace TSEconomy.Commands
                             return;
                         }
 
-                        var currencyInput = parameters.ElementAtOrDefault(1);
+                        var currencyInput = parameters.ElementAtOrDefault(2);
 
                         if (currencyInput == default)
                         {
@@ -42,7 +52,7 @@ namespace TSEconomy.Commands
                             return;
                         }
 
-                        var amountInput = parameters.ElementAtOrDefault(2);
+                        var amountInput = parameters.ElementAtOrDefault(3);
                         if (amountInput == default)
                         {
                             player.SendErrorMessage(Localization.TryGetString("[i:855]Please enter an amount to set!", "SetBalance"));
@@ -66,10 +76,12 @@ namespace TSEconomy.Commands
                             player.SendErrorMessage(Localization.TryGetString("[i:855]The amount you entered was invalid!", "SetBalance"));
                             return;
                         }
+
+                        return;
                     }
                 case string s when s == Localization.TryGetString("resetbal"):
                     {
-                        var affectedUser = Api.GetUser(parameters.ElementAtOrDefault(0), out var affectedPlayer);
+                        var affectedUser = Api.GetUser(parameters.ElementAtOrDefault(1), out var affectedPlayer);
 
                         if (affectedUser == null)
                         {
@@ -77,7 +89,7 @@ namespace TSEconomy.Commands
                             return;
                         }
 
-                        var currencyInput = parameters.ElementAtOrDefault(1);
+                        var currencyInput = parameters.ElementAtOrDefault(2);
 
                         if (currencyInput == default)
                         {
@@ -101,35 +113,11 @@ namespace TSEconomy.Commands
                         
                         return;
                     }
-                case string s when s == Localization.TryGetString("checkbal"):
-                    {
-                        var affectedUser = Api.GetUser(parameters.ElementAtOrDefault(0), out _);
-
-                        if (affectedUser == null)
-                        {
-                            player.SendErrorMessage(Localization.TryGetString("[i:855]That player does not exist!", "CheckBalance"));
-                            return;
-                        }
-
-                        var currencyInput = parameters.ElementAtOrDefault(1);
-
-                        if (currencyInput == default)
-                        {
-                            player.SendErrorMessage(Localization.TryGetString("[i:855]Please enter a currency name!", "CheckBalance"));
-                            return;
-                        }
-
-                        Currency? currency = Currency.Get(currencyInput);
-                        if (currency == null)
-                        {
-                            player.SendErrorMessage(Localization.TryGetString("[i:855]That's not a valid currency!", "CheckBalance"));
-                            return;
-                        }
-
-                        var bankAccount = Api.GetBankAccount(affectedUser.ID);
-                        player.SendInfoMessage(Localization.TryGetString("[i:855]The user {0}'s balance for {1} is {2}.", "CheckBalance").SFormat(affectedUser.Name, currency.DisplayName, currency.GetName((double)bankAccount.GetBalance(currency))));
-                        return;
-                    }
+                default:
+                    player.SendWarningMessage("[TSEconomy BankAdmin] [i:855] BankAdmin Command usage:");
+                    player.SendWarningMessage("\'{0}{1} setbal [player] [currency] [amount]\' - sets the balance of the player.", TShock.Config.Settings.CommandSpecifier, ShortestAlias);
+                    player.SendWarningMessage("\'{0}{1} resetbal [player] [currency]\' - resets the balance of the player for the specified currency.", TShock.Config.Settings.CommandSpecifier, ShortestAlias);
+                    return;
             }
         }
     }

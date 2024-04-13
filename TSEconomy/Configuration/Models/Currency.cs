@@ -21,7 +21,9 @@
         public Currency() { }
         public static Currency? Get(string name)
         {
-            return Api.Currencies.FirstOrDefault(x => x.InternalName == name || x.DisplayName == name || x.Symbol == name);
+            string n = name.ToLower();
+
+            return Api.Currencies.FirstOrDefault(x => x.InternalName.ToLower().StartsWith(n) || x.DisplayName.ToLower().StartsWith(n) || x.Symbol == n);
         }
         public bool IsSystemCurrency()
         {
