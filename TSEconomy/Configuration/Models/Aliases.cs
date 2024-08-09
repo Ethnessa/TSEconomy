@@ -15,6 +15,7 @@ namespace TSEconomy.Configuration.Models
                 ListCurrenciesCommand => ListCurrencies,
                 SendCommand => Send,
                 BalTopCommand => BalTop,
+                TradeCommand => Trade,
                 _ => Array.Empty<string>(),
             };
         }
@@ -33,6 +34,9 @@ namespace TSEconomy.Configuration.Models
 
         [JsonProperty("BalTop")]
         public string[] BalTop { get; set; } = { "baltop", "bt", "leaderboard", "lb" };
+
+        [JsonProperty("Trade")]
+        public string[] Trade { get; set; } = { "trade", "tr" };
 
     }
 }

@@ -46,8 +46,11 @@ namespace TSEconomy.Logging
             }
 
             using StreamWriter writer = File.AppendText(sessionLogFile);
+            string logs = "";
 
-            foreach (string str in LogsToWrite) writer.WriteLine(str);
+            foreach (string str in LogsToWrite) logs += str + "\n";
+            
+            writer.Write(logs);
 
             LogsToWrite.Clear();
             
@@ -84,7 +87,7 @@ namespace TSEconomy.Logging
 
             var files = Directory.GetFiles(LogPath);
 
-            if (files.Length <= Api.Config.MaxLogFilesAllowed) return;
+            if (files.Length <= TSEconomy.Config.MaxLogFilesAllowed) return;
 
             Dictionary<string,DateTime> fileDates = new();
             foreach ( var file in files)
@@ -100,7 +103,7 @@ namespace TSEconomy.Logging
 
                 fileDates.Remove(file.Key);
 
-                if (fileDates.Count <= Api.Config.MaxLogFilesAllowed) return;
+                if (fileDates.Count <= TSEconomy.Config.MaxLogFilesAllowed) return;
             }
         }
 

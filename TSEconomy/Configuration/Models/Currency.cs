@@ -1,4 +1,6 @@
-﻿namespace TSEconomy.Configuration.Models
+﻿using TSEconomy.Api;
+
+namespace TSEconomy.Configuration.Models
 {
     public class Currency
     {
@@ -23,17 +25,17 @@
         {
             string n = name.ToLower();
 
-            return Api.Currencies.FirstOrDefault(x => x.InternalName.ToLower().StartsWith(n) || x.DisplayName.ToLower().StartsWith(n) || x.Symbol == n);
+            return CurrencyApi.Currencies.Values.FirstOrDefault(x => x.InternalName.ToLower().StartsWith(n) || x.DisplayName.ToLower().StartsWith(n) || x.Symbol == n);
         }
         public bool IsSystemCurrency()
         {
-            return this == Api.SystemCurrency;
+            return this == CurrencyApi.SystemCurrency;
 
         }
 
         public static Currency? GetDefault()
         {
-            return Api.Currencies.ElementAtOrDefault(1);
+            return CurrencyApi.Currencies.Values.ElementAtOrDefault(1);
         }
 
         public string GetName(double amount, bool showSymbol = true, bool showName = false, int DecimalsKept = 2)

@@ -1,4 +1,5 @@
-﻿using TSEconomy.Lang;
+﻿using TSEconomy.Api;
+using TSEconomy.Lang;
 using TShockAPI;
 
 namespace TSEconomy.Commands
@@ -12,7 +13,7 @@ namespace TSEconomy.Commands
             var param = args.Parameters;
             var player = args.Player;
 
-            var currList = Api.GetCurrencies();
+            var currList = CurrencyApi.Currencies.Values.ToList();
             currList.RemoveAt(0);
 
             var currNames = currList.Select(x => "- " + x.DisplayName);

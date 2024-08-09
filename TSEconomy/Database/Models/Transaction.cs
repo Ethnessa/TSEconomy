@@ -49,7 +49,7 @@ namespace TSEconomy.Database.Models
         /// </summary>
         public Transaction(int UserID, string internalCurrencyName, double amountChanged, string transDetails, TransactionProperties flags)
         {
-            UserID = UserID;
+            this.UserID = UserID;
             InternalCurrencyName = internalCurrencyName;
             Amount = amountChanged;
             TransactionDetails = transDetails;

@@ -25,7 +25,8 @@
             new SendCommand(),
             new ListCurrenciesCommand(),
             new BankAdminCommand(),
-            new BalTopCommand()
+            new BalTopCommand(),
+            new TradeCommand()
         };
     }
 }

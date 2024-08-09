@@ -1,4 +1,5 @@
-﻿using TSEconomy.Configuration.Models;
+﻿using TSEconomy.Api;
+using TSEconomy.Configuration.Models;
 using TSEconomy.Database.Models;
 using TShockAPI;
 
@@ -34,12 +35,16 @@ namespace TSEconomy.Extensions
         /// <param name="player"></param>
         /// <param name="curr"></param>
         /// <returns></returns>
-        public static BankAccount? GetBankAccount(this TSPlayer player, Currency curr)
+        public static BankAccount? GetBankAccount(this TSPlayer player)
         {
             if (!player.RealPlayer)
-                return Api.WorldAccount;
+                return AccountApi.WorldAccount;
 
-            return Api.GetBankAccount(player.Account.ID);
+            AccountApi.BankAccounts.TryGetValue(player.Name, out var acc);
+            
+            if (acc != null) return acc;
+
+            return AccountApi.GetBankAccount(player.Account.ID);
         }
 
 
@@ -50,12 +55,27 @@ namespace TSEconomy.Extensions
         /// <param name="player"></param>
         /// <param name="curr"></param>
         /// <returns></returns>
-        public static bool HasBankAccount(this TSPlayer player, Currency curr)
+        public static bool HasBankAccount(this TSPlayer player)
         {
             if (!player.RealPlayer)
                 return true;
 
-            return Api.HasBankAccount(player.Account.ID);
+            return AccountApi.HasBankAccount(player.Account.ID);
+        }
+
+        public static TradeInventory GetTradeInventory(this TSPlayer player)
+        {
+            TradeInventoryApi.TradeInventories.TryGetValue(player.Name, out var inv);
+            if (inv != null) return inv;
+
+            inv = new();
+            inv.getItems();
+            inv.getMoney();
+            inv.PlayerName = player.Name;
+
+            TradeInventoryApi.InsertTradeInventory(inv);
+
+            return inv;
         }
 
 

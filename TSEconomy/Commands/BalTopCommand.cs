@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using TSEconomy.Api;
 using TSEconomy.Configuration.Models;
 using TSEconomy.Database.Models;
 using TShockAPI;
@@ -23,7 +24,7 @@ namespace TSEconomy.Commands
                 return;
             }
 
-            if (Api.BankAccounts.Count <= 1)
+            if (AccountApi.BankAccounts.Count <= 1)
             {
                 player.SendErrorMessage("[TSEconomy BalTop] There is currently no one on the leaderboard.");
                 return;
@@ -43,7 +44,7 @@ namespace TSEconomy.Commands
 
             if (args.Parameters.Count == 2 && !PaginationTools.TryParsePageNumber(args.Parameters, 1, null, out page))
             {
-                account = Api.GetUser(parameters[1], out _);
+                account = AccountApi.GetUser(parameters[1], out _);
 
                 if (account == null)
                 {
@@ -60,7 +61,7 @@ namespace TSEconomy.Commands
             int i = 1;
             int j = -1;
 
-            List<BankAccount> sortedAccounts = Api.BankAccounts.OrderBy(i => -i.GetBalance(curr)).ToList();
+            List<BankAccount> sortedAccounts = AccountApi.BankAccounts.Values.OrderBy(i => -i.GetBalance(curr)).ToList();
             sortedAccounts.RemoveAll(i => i.IsWorldAccount());
 
             int sequence = 0;

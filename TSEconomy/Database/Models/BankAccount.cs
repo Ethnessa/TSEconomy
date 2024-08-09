@@ -2,6 +2,7 @@
 using NuGet.Protocol;
 using PetaPoco;
 using Terraria;
+using TSEconomy.Api;
 using TSEconomy.Configuration.Models;
 using TSEconomy.Database.Models.Properties;
 using TSEconomy.Lang;
@@ -57,8 +58,8 @@ namespace TSEconomy.Database.Models
         public void Reset()
         {
             JsonBalance = new Dictionary<string, double>().ToJson();
-            TransactionLogging.Log("Reseted {0} balance for every currency!".SFormat(Api.GetAccountName(UserID)));
-            Api.UpdateBankAccount(this);
+            TransactionLogging.Log("Reseted {0} balance for every currency!".SFormat(AccountApi.GetAccountName(UserID)));
+            AccountApi.UpdateBankAccount(this);
         }
 
 
@@ -69,7 +70,7 @@ namespace TSEconomy.Database.Models
         /// <returns></returns>
         public double ?GetBalance(Currency curr)
         {
-            if (!Api.IsCurrencyValid(curr))
+            if (!CurrencyApi.IsCurrencyValid(curr))
             {
                 TShock.Log.ConsoleError(Localization.TryGetString("Error: tried to get an account's balance for a currency that does not exist.", "GetBalance"));
                 return null;
@@ -89,7 +90,7 @@ namespace TSEconomy.Database.Models
         /// <returns></returns>
         public bool AddCurrency(Currency curr)
         {
-            if (!Api.IsCurrencyValid(curr) || GetBalance().ContainsKey(curr.InternalName))
+            if (!CurrencyApi.IsCurrencyValid(curr) || GetBalance().ContainsKey(curr.InternalName))
                 return false;
 
             var newDict = GetBalance();
@@ -115,7 +116,7 @@ namespace TSEconomy.Database.Models
             if(transLog == "{0} has created a new bank account.")
                 transLog = Localization.TryGetString("{0} has created a new bank account.");
 
-            if (!Api.IsCurrencyValid(startingCurrency))
+            if (!CurrencyApi.IsCurrencyValid(startingCurrency))
             {
                 // error
                 return null;
@@ -127,8 +128,8 @@ namespace TSEconomy.Database.Models
                 return null;
             }
 
-            if (Api.HasBankAccount(userID))
-                return Api.GetBankAccount(userID);
+            if (AccountApi.HasBankAccount(userID))
+                return AccountApi.GetBankAccount(userID);
 
 
             var acc = new BankAccount()
@@ -139,14 +140,14 @@ namespace TSEconomy.Database.Models
                 JsonBalance = new Dictionary<string, double>().ToJson()
             };
 
-            Api.InsertBankAccount(acc);
+            AccountApi.InsertBankAccount(acc);
 
             acc.SetBalance(initializedCurrencyValue, startingCurrency);
 
             if (acc.IsWorldAccount())
                 return acc;
 
-            TransactionLogging.Log(transLog.SFormat(Api.GetAccountName(acc.UserID)));
+            TransactionLogging.Log(transLog.SFormat(AccountApi.GetAccountName(acc.UserID)));
 
             return acc;
 
@@ -155,7 +156,7 @@ namespace TSEconomy.Database.Models
         public static async Task<BankAccount?> TryCreateNewAccountAsync(Currency startingCurrency, double initializedCurrencyValue, int userID, BankAccountProperties flags = BankAccountProperties.Default,
                                                string transLog = "{0} has created a new bank")
         {
-            return await Task.Run(() => TryCreateNewAccount(startingCurrency, initializedCurrencyValue, userID, flags));
+            return await Task.Run(() => TryCreateNewAccount(startingCurrency, initializedCurrencyValue, userID, flags, transLog));
         }
         /// <summary>
         /// Attempts to modify the balance of the bank account.
@@ -206,17 +207,17 @@ namespace TSEconomy.Database.Models
                 return false;
             }
 
-            Api.UpdateBankAccount(this);
+            AccountApi.UpdateBankAccount(this);
 
             if (!IsWorldAccount())
             {
                 if (operationType == BalanceOperation.Add)
                 {
-                    Api.AddTransaction(UserID, curr.InternalName, amount, transLog.SFormat(Api.GetAccountName(UserID), amount, oldBalance, GetBalance(curr)), TransactionProperties.Add);
+                    TransactionApi.AddTransaction(UserID, curr.InternalName, amount, transLog.SFormat(AccountApi.GetAccountName(UserID), amount, oldBalance, GetBalance(curr)), TransactionProperties.Add);
                 }
                 else
                 {
-                    Api.AddTransaction(UserID, curr.InternalName, -amount, transLog.SFormat(Api.GetAccountName(UserID), amount, oldBalance, GetBalance(curr)), TransactionProperties.Add);
+                    TransactionApi.AddTransaction(UserID, curr.InternalName, -amount, transLog.SFormat(AccountApi.GetAccountName(UserID), amount, oldBalance, GetBalance(curr)), TransactionProperties.Add);
                 }
             }
 
@@ -247,12 +248,12 @@ namespace TSEconomy.Database.Models
 
             JsonBalance = newDict.ToJson();
 
-            Api.UpdateBankAccount(this);
+            AccountApi.UpdateBankAccount(this);
 
             if (IsWorldAccount())
                 return;
 
-            Api.AddTransaction(UserID, curr.InternalName, amount, transLog.SFormat(Api.GetAccountName(UserID), amount, oldBalance), TransactionProperties.Set);
+            TransactionApi.AddTransaction(UserID, curr.InternalName, amount, transLog.SFormat(AccountApi.GetAccountName(UserID), amount, oldBalance), TransactionProperties.Set);
         }
 
 
@@ -268,7 +269,7 @@ namespace TSEconomy.Database.Models
         /// <returns></returns>
         public bool TryTransferTo(BankAccount receiver, Currency curr, double amount)
         {
-            return Api.TryTransferbetween(this, receiver, curr, amount);
+            return TransactionApi.TryTransferBetween(this, receiver, curr, amount);
         }
 
         public async Task<bool> TryTransferToAsync(BankAccount receiver, Currency curr, double amount)
@@ -295,7 +296,7 @@ namespace TSEconomy.Database.Models
         /// <returns></returns>
         public bool HasEnough(double amount, Currency curr)
         {
-            return Api.HasEnough(this, curr, amount);
+            return AccountApi.HasEnough(this, curr, amount);
         }
 
         /// <summary>
@@ -308,7 +309,7 @@ namespace TSEconomy.Database.Models
         /// <returns></returns>
         public Transaction AddTransaction(double amountChanged, Currency curr,string transLog, TransactionProperties flag)
         {
-            return Api.AddTransaction(UserID, curr.InternalName, amountChanged, transLog, flag);
+            return TransactionApi.AddTransaction(UserID, curr.InternalName, amountChanged, transLog, flag);
         }
 
         public async Task<Transaction> AddTransactionAsync(double amountChanged, Currency curr, string transLog, TransactionProperties flag)
@@ -327,12 +328,12 @@ namespace TSEconomy.Database.Models
 
         public string GetAccountName()
         {
-            return Api.GetAccountName(UserID);
+            return AccountApi.GetAccountName(UserID);
         }
 
         public UserAccount GetAccount()
         {
-            return Api.GetUser(GetAccountName(), out _);
+            return AccountApi.GetUser(GetAccountName(), out _);
         }
 
 

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using TSEconomy.Api;
 using TSEconomy.Configuration.Models;
 using TSEconomy.Extensions;
 using TSEconomy.Lang;
@@ -21,7 +22,7 @@ namespace TSEconomy.Commands
                 return;
             }
 
-            var sendingTo = Api.GetUser(param.ElementAtOrDefault(0), out var receiverPlayer);
+            var sendingTo = AccountApi.GetUser(param.ElementAtOrDefault(0), out var receiverPlayer);
 
             if (sendingTo == null)
             {
@@ -57,8 +58,8 @@ namespace TSEconomy.Commands
                 return;
             }
 
-            var bankAccount = Api.GetBankAccount(player.GetUserId());
-            var receiverAccount = Api.GetBankAccount(sendingTo.ID);
+            var bankAccount = AccountApi.GetBankAccount(player.GetUserId());
+            var receiverAccount = AccountApi.GetBankAccount(sendingTo.ID);
             var success = await bankAccount.TryTransferToAsync(receiverAccount, currency, amnt);
 
             if (!success)
