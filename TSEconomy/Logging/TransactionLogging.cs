@@ -1,5 +1,6 @@
 ﻿using TSEconomy.Database.Models;
 using TSEconomy.Database.Models.Properties;
+using TShockAPI;
 
 namespace TSEconomy.Logging
 {
@@ -15,9 +16,19 @@ namespace TSEconomy.Logging
             }
         }
         public static string LogPath => TSEconomy.Config.TransactionLogPath;
-
-        public static void Log(String str, bool timeStamp = true)
+        public static List<string> LogsToWrite { get; set; }
+        public static void Log(string str, bool timeStamp = true)
         {
+            if (LogsToWrite == null) LogsToWrite = new();
+
+            LogsToWrite.Add($"{(timeStamp ? ("[" + DateTime.UtcNow + "] ") : "")}" + str);
+
+            if (LogsToWrite.Count > TSEconomy.Config.MaxLogFilesAllowed) ForceWrite();
+        }
+        public static void ForceWrite()
+        {
+            if (LogsToWrite.Count == 0) return;
+
             if (!Directory.Exists(LogPath))
             {
                 Directory.CreateDirectory(LogPath);
@@ -35,19 +46,37 @@ namespace TSEconomy.Logging
             }
 
             using StreamWriter writer = File.AppendText(sessionLogFile);
+            string logs = "";
 
-            writer.WriteLine($"{(timeStamp ? ("[" + DateTime.UtcNow + "] ") : "")}" + str);
+            foreach (string str in LogsToWrite) logs += str + "\n";
+            
+            writer.Write(logs);
+
+            LogsToWrite.Clear();
+            
         }
-
 
         public static void Log(Transaction trans)
         {
             string flag = trans.Flags == TransactionProperties.Set ? "Set" : "Add";
-
             Log($"[{trans.Timestamp}] [{flag}] [Cur:{trans.InternalCurrencyName}] [ID:{trans.UserID}]: {trans.TransactionDetails}", false);
 
         }
 
+        public static async Task LogAsync(Transaction trans)
+        {
+            await Task.Run(() => Log(trans));
+        }
+
+        public static async Task LogAsync(string str, bool timeStamp = true)
+        {
+            await Task.Run(() => Log(str, timeStamp));
+        }
+
+        public static async Task ForceWriteAsync()
+        {
+            await Task.Run(() => ForceWrite());
+        }
         public static void PurgeOldLogs()
         {
             if (!Directory.Exists(LogPath))
@@ -58,7 +87,7 @@ namespace TSEconomy.Logging
 
             var files = Directory.GetFiles(LogPath);
 
-            if (files.Length <= Api.Config.MaxLogFilesAllowed) return;
+            if (files.Length <= TSEconomy.Config.MaxLogFilesAllowed) return;
 
             Dictionary<string,DateTime> fileDates = new();
             foreach ( var file in files)
@@ -74,7 +103,7 @@ namespace TSEconomy.Logging
 
                 fileDates.Remove(file.Key);
 
-                if (fileDates.Count <= Api.Config.MaxLogFilesAllowed) return;
+                if (fileDates.Count <= TSEconomy.Config.MaxLogFilesAllowed) return;
             }
         }
 

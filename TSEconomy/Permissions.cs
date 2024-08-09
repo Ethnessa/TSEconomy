@@ -11,5 +11,7 @@
         public static readonly string Balance = "tseconomy.bal";
         public static readonly string ListCurrencies = "tseconomy.currencies";
         public static readonly string ResetIgnoreBindingToWorld = "tseconomy.ignoreworldbinding";
+        public static readonly string BalTop = "tseconomy.baltop";
+        public static readonly string Trade = "tseconomy.trade";
     }
 }

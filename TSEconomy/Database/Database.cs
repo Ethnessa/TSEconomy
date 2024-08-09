@@ -68,6 +68,7 @@ namespace TSEconomy.Database
         {
             new Table<BankAccount>(DB, type);
             new Table<Models.Transaction>(DB, type);
+            new Table<TradeInventory>(DB, type);
         }
     }
 }

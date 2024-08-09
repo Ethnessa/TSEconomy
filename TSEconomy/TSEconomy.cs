@@ -1,9 +1,16 @@
-﻿using Terraria;
+﻿using MonoMod.Utils;
+using Terraria;
+using Terraria.DataStructures;
+using Terraria.GameContent.Tile_Entities;
+using Terraria.ID;
 using TerrariaApi.Server;
+using TSEconomy.Api;
 using TSEconomy.Configuration.Models;
 using TSEconomy.Lang;
 using TSEconomy.Logging;
+using TSEconomy.Packets;
 using TShockAPI;
+using TShockAPI.Hooks;
 
 namespace TSEconomy
 {
@@ -13,6 +20,12 @@ namespace TSEconomy
     [ApiVersion(2, 1)]
     public class TSEconomy : TerrariaPlugin
     {
+
+        public const string ASKING_TO_TRADE_WITH = "tseconomy_asking_to_trade_with";
+        public const string CURRENTLY_TRADING_WITH = "tseconomy_currently_tading_with";
+        public const string BEING_ASKED_TO_TRADE_BY = "tseconomy_being_asked_to_trade_by";
+        public const string HAS_COMFIRMED_TRADE = "tseconomy_comfirmed_trade";
+
 
         public override string Author => "TCN";
         public override string Description => "A plugin that adds an economy to your server.";
@@ -43,6 +56,8 @@ namespace TSEconomy
         {
             // register hooks
             ServerApi.Hooks.GameInitialize.Register(this, OnInitialize);
+            ServerApi.Hooks.NetGreetPlayer.Register(this, PacketHandler.OnGreet);
+            ServerApi.Hooks.ServerLeave.Register(this, PacketHandler.OnLeave);
 
             // load our config file
             Configuration.Configuration.Load();
@@ -64,24 +79,20 @@ namespace TSEconomy
             Commands.Commands.RegisterAll();
 
             // register hooks
-            TShockAPI.Hooks.GeneralHooks.ReloadEvent += (x) =>
-            {
-                Configuration.Configuration.Load();
-                Commands.Commands.Refresh();
-                x.Player.SendSuccessMessage(Localization.TryGetString("[i:855]Reloaded config.", "plugin"));
-            };
+            TShockAPI.Hooks.GeneralHooks.ReloadEvent += OnReload;
 
             // Load currencies
 
             // The system currency should always be first
             Currency sysCurrency = new("System-Cash", "sys", "*", "System-Cash", false);
 
-            Api.Currencies.Add(sysCurrency);
+            CurrencyApi.AddCurrency(sysCurrency);
 
-            Api.Currencies.AddRange(Config.Currencies);
+            CurrencyApi.Currencies.AddRange(Config.Currencies.ToDictionary(i => i.InternalName));
 
             // Cache acounts
-            Api.LoadAccounts();
+            AccountApi.LoadAccounts();
+            TradeInventoryApi.LoadTradeInventories();
 
             // If some accounts are bound to other worlds they shall reset
             if (Config.ResetBalancesOnNewWorld) HandleBalanceReset();
@@ -90,9 +101,17 @@ namespace TSEconomy
 
         }
 
+        private static void OnReload(ReloadEventArgs args)
+        {
+
+            Configuration.Configuration.Load();
+            Commands.Commands.Refresh();
+            args.Player.SendSuccessMessage(Localization.TryGetString("[i:855]Reloaded config.", "plugin"));
+        }
+
         private static void HandleBalanceReset()
         {
-            var selectedAccounts = Api.BankAccounts.Where(i => i.WorldID != Main.worldID
+            var selectedAccounts = AccountApi.BankAccounts.Values.Where(i => i.WorldID != Main.worldID
                                                                && i.UserID != -1
                                                                && !i.HasPermission(Permissions.ResetIgnoreBindingToWorld));
 
@@ -102,9 +121,11 @@ namespace TSEconomy
             TShock.Log.ConsoleWarn("[TSEconomy] New world dectected! Found {0} accounts not belonging to this world! Do you want to reset their balance? (Y/N):", selectedAccounts.Count());
             var str = Console.ReadLine();
 
-            if (!str.ToUpper().StartsWith("Y"))
+            if (!str.ToUpper().StartsWith("N"))
             {
                 TShock.Log.ConsoleWarn("[TSEconomy] Canceling reset...");
+                
+                TileEntityID.
                 return;
             }
             
@@ -120,6 +141,19 @@ namespace TSEconomy
 
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            TransactionLogging.ForceWrite();
+
+            if (disposing)
+            {
+                ServerApi.Hooks.GameInitialize.Deregister(this, OnInitialize);
+                ServerApi.Hooks.NetGreetPlayer.Deregister(this, PacketHandler.OnGreet);
+                TShockAPI.Hooks.GeneralHooks.ReloadEvent -= OnReload;
+            }
+
+            base.Dispose(disposing);
+        }
 
     }
 }

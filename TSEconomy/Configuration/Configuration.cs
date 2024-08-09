@@ -29,9 +29,14 @@ namespace TSEconomy.Configuration
 
         [JsonProperty("MaxLogFilesAllowed", Order = 6)]
         public int MaxLogFilesAllowed { get; set; } = 15;
+        [JsonProperty("LogsToQueueBeforeWriting", Order = 7)]
+        public int LogsToQueueBeforeWriting { get; set; } = 7;
 
+        [JsonProperty("BalTopLeaderboardConfigs", Order = 8)]
+        public BalTopLeaderboard BalTopLeaderboard { get; set; } = new BalTopLeaderboard();
+        
         // try and make this last always if possible
-        [JsonProperty("CommandAliases", Order = 7)]
+        [JsonProperty("CommandAliases", Order = 9)]
         public Aliases Aliases { get; set; } = new();
 
         public static void Load()

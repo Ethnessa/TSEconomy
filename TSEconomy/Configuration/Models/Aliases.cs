@@ -14,12 +14,14 @@ namespace TSEconomy.Configuration.Models
                 BankAdminCommand => BankAdmin,
                 ListCurrenciesCommand => ListCurrencies,
                 SendCommand => Send,
+                BalTopCommand => BalTop,
+                TradeCommand => Trade,
                 _ => Array.Empty<string>(),
             };
         }
 
         [JsonProperty("Balance")]
-        public string[] BalanceAliases { get; set; } = { "balance", "bal", "money" };
+        public string[] BalanceAliases { get; set; } = { "balance", "bal", "money", "muns" };
 
         [JsonProperty("BankAdmin")]
         public string[] BankAdmin { get; set; } = { "bankadmin", "banka", "ecoadmin", "ba" };
@@ -29,6 +31,12 @@ namespace TSEconomy.Configuration.Models
 
         [JsonProperty("Send")]
         public string[] Send { get; set; } = { "send", "pay", "give" };
+
+        [JsonProperty("BalTop")]
+        public string[] BalTop { get; set; } = { "baltop", "bt", "leaderboard", "lb" };
+
+        [JsonProperty("Trade")]
+        public string[] Trade { get; set; } = { "trade", "tr" };
 
     }
 }
